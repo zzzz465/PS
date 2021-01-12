@@ -1,5 +1,13 @@
 def multiply(a, b): # a: List[int], b: List[int] -> List[int]
-    pass
+    result = [0] * (len(a) * len(b) + 1)
+    if len(a) >= len(b):
+        for i in range(len(a)):
+            for j in range(len(b)):
+                result[i+j] += a[i] * b[j]
+
+        return normalize(result)
+    else:
+        multiply(b, a)
 
 def add(a, b): # a: List[int], b: List[int] -> List[int]
     # 길이 a < b
@@ -8,42 +16,46 @@ def add(a, b): # a: List[int], b: List[int] -> List[int]
         for i in range(len(a)): # a와 b 공통된 부분을 더하고
             result.append(a[i] + b[i])
 
-        return normalize(result + b[len(a):])km # b의 나머지 부분을 뒤에 붙여서 반환
+        return normalize(result + b[len(a):]) # b의 나머지 부분을 뒤에 붙여서 반환
     else:
-        add(b, a)
+        return add(b, a)
 
-def normalize(li): # li: List[int] -> List[int]
-    result = list()
+def normalize(li): # li: List[int] -> List[int], li의 요소는 양수만 있다고 가정
+    res = list()
     for i in range(len(li)):
-        val = li[i]
-        if len(result) == i: # index 할당 X
-            if val >= 10:
-                result.append(val % 10)
-                result.append(val / 10)
-            else:
-                result.append(val)
-        else: # index 할당 됨, 뒤에 자리가 할당되었는지는 모름
-            result[i] += val
-            if len(result) + 1 > i: # 뒷 자리도 할당되었을 경우
-                result[i + 1] += result[i] / 10
-            else: # 뒷 자리 할당 X 일 경우
-                result.append(result[i] / 10)
+        if i < len(res): # 만약 해당하는 index가 이미 있을 경우
+            res[i] += li[i]
+        else:
+            res.append(li[i])
 
-            result[i] %= 10
+        portion = int(res[i] / 10)
+        res[i] %= 10
 
-    return result
+        if portion > 0:
+            if i + 1 < len(res): # 자리 있을경우
+                res[i+1] += portion
+            else: # 자리 없을경우
+                res.append(portion)
 
-def subFrom(a, b): # a >= b 일때 a - b 를 구현
+    lastIndex = len(res) - 1
+    if res[lastIndex] >= 10:
+        res.append(int(res[lastIndex] / 10))
+        res[lastIndex] %= 10
+
+    while res[len(res) - 1] == 0:
+        res.pop()
+
+    return res
+
+def subFrom(a, b): # a >= b을 가정하고 a - b 를 구현
     if len(a) >= len(b):
-        result = list()
-        for i in range(len(b)):
-
+        pass
     else:
-        subFrom(b, a)
+        return subFrom(b, a)
 
 def karatsuba(a, b): # a: List[int], b: List[int] -> List[int]
     if len(a) < len(b):
-        karatsuba(b, a)
+        return karatsuba(b, a)
 
     if len(a) == 0 or len(b) == 0:
         return []
@@ -63,3 +75,13 @@ def karatsuba(a, b): # a: List[int], b: List[int] -> List[int]
     z1 = subFrom(subFrom( multiply(multiply(a0, a1), multiply(b0, b1)), z0), z2) # (a0 + a1) * (b0 + b1) - z0 - z2
 
     return add(add(z0, z1), z2)
+
+def karatsubaToString(li):
+    return ''.join(list(map(str, list(reversed(li)))))
+
+# tests
+assert '500' == karatsubaToString(karatsuba([0, 0, 1], [5]))
+
+bigNumber = [0] * 49 + [1] # 50자리 수, 10^49
+
+assert '1' + '0' * (49 * 2) == karatsubaToString(karatsuba(bigNumber, bigNumber))

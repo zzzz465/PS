@@ -2,11 +2,15 @@ import os, sys
 
 C = int(input()) # 테스트 케이스
 
+sys.setrecursionlimit(100000)
+
 results = []
 
 for _ in range(C):
-    N = int(input()) # 판자 수
-    planks = list(map(int, input().split())) # 판자 개수는 1~10000개, 각각의 높이 범위는 1~10000개 이다
+    N = int(sys.stdin.readline()) # 판자 수
+    planks = []
+    for numStr in sys.stdin.readline().split():
+        planks.append(int(numStr))
 
     def solve(left, right):
         global planks
