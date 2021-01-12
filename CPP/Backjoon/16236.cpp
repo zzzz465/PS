@@ -53,41 +53,42 @@ bool isValid(int index) {
 bool visit[size * size];
 
 const int INVALID_VALUE = 1000000;
+int memo[size * size];
 
-int DFS(int index, int step, int arrivalPoint) {
-    if (index == arrivalPoint) return step;
+int DFS(int index, int arrivalPoint) {
+    if (index == arrivalPoint) return 1;
 
-    int result = INVALID_VALUE;
+    int& ret = memo[index];
 
     visit[index] = true;
 
     // up
     int upIndex = index - N;
     if (isValid(upIndex) && visit[upIndex] != true && sharkSize >= map[upIndex]) {
-        result = std::min(result, DFS(upIndex, step + 1, arrivalPoint));
+        ret = std::min(ret, DFS(upIndex, arrivalPoint));
     }
 
     // right
     int rightIndex = index + 1;
     if (isValid(rightIndex) && rightIndex % N != 0 && visit[rightIndex] != true && sharkSize >= map[rightIndex]) {
-        result = std::min(result, DFS(rightIndex, step + 1, arrivalPoint));
+        ret = std::min(ret, DFS(rightIndex, arrivalPoint));
     }
 
     // down
     int downIndex = index + N;
     if (isValid(downIndex) && visit[downIndex] != true && sharkSize >= map[downIndex]) {
-        result = std::min(result, DFS(downIndex, step + 1, arrivalPoint));
+        ret = std::min(ret, DFS(downIndex, arrivalPoint));
     }
 
     // left
     int leftIndex = index - 1;
     if (isValid(leftIndex) && index % N != 0 && visit[leftIndex] != true && sharkSize >= map[leftIndex]) {
-        result = std::min(result, DFS(leftIndex, step + 1, arrivalPoint));
+        ret = std::min(ret, DFS(leftIndex, arrivalPoint));
     }
 
     visit[index] = false;
 
-    return result;
+    return ret;
 }
 
 void loop() {
