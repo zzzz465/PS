@@ -30,6 +30,10 @@ int minIndex = -1;
 int minPath = INT_MAX;
 
 int DFS(int, int, int);
+int doDijkstra(int, int);
+
+std::vector<int> fishes;
+
 // 가장 가까운 물고기를 먹고, 만약 거리가 동일하다면 왼쪽 위부터 먹음
 void find() {
     minIndex = -1;
@@ -37,7 +41,7 @@ void find() {
     for (int i = 0; i < N * N; i++) {
         int fish = map[i];
         if (fish != 0 && map[i] < sharkSize) {
-            int res = DFS(curIndex, 0, i);
+            int res = doDijkstra(curIndex, i);
             if (res < minPath) {
                 minIndex = i;
                 minPath = res;
@@ -51,50 +55,65 @@ bool isValid(int index) {
 }
 
 bool visit[size * size];
+int dijkstra[size * size];
 
 const int INVALID_VALUE = 1000000;
-int memo[size * size];
 
-int DFS(int index, int arrivalPoint) {
-    if (index == arrivalPoint) return 1;
+int doDijkstra(int start, int target) { // 시작점
+    std::fill_n(dijkstra, N * N, INT_MAX);
+    std::fill_n(visit, N * N, false);
 
-    int& ret = memo[index];
+    dijkstra[start] = 0;
 
-    visit[index] = true;
+    while (true) {
+        int index = -1;
+        int maxVal = INT_MAX;
 
-    // up
-    int upIndex = index - N;
-    if (isValid(upIndex) && visit[upIndex] != true && sharkSize >= map[upIndex]) {
-        ret = std::min(ret, DFS(upIndex, arrivalPoint));
+        for (int i = 0; i < N * N; i++) {
+            if (visit[i] != true && dijkstra[i] < maxVal) {
+                index = i;
+                maxVal = dijkstra[i];
+            }
+        }
+
+        if (index == -1) break;
+
+        int topIndex = index - N;
+        if (isValid(topIndex) && visit[topIndex] != true) {
+            if (map[topIndex] <= sharkSize)
+                dijkstra[topIndex] = std::min(dijkstra[topIndex], dijkstra[index] + 1);
+        }
+
+        int rightIndex = index + 1;
+        if (isValid(rightIndex) && visit[rightIndex] != true && rightIndex % N != 0) {
+            if (map[rightIndex] <= sharkSize)
+                dijkstra[rightIndex] = std::min(dijkstra[rightIndex], dijkstra[index] + 1);
+        }
+
+        int bottomIndex = index + N;
+        if (isValid(bottomIndex) && visit[bottomIndex] != true) {
+            if (map[bottomIndex] <= sharkSize)
+                dijkstra[bottomIndex] = std::min(dijkstra[bottomIndex], dijkstra[index] + 1);
+        }
+
+        int leftIndex = index - 1;
+        if (isValid(leftIndex) && visit[leftIndex] != true && index % N != 0) {
+            if (map[leftIndex] <= sharkSize)
+                dijkstra[leftIndex] = std::min(dijkstra[leftIndex], dijkstra[index] + 1);
+        }
+
+        visit[index] = true;
+
+        if (index == target) break;
     }
 
-    // right
-    int rightIndex = index + 1;
-    if (isValid(rightIndex) && rightIndex % N != 0 && visit[rightIndex] != true && sharkSize >= map[rightIndex]) {
-        ret = std::min(ret, DFS(rightIndex, arrivalPoint));
-    }
-
-    // down
-    int downIndex = index + N;
-    if (isValid(downIndex) && visit[downIndex] != true && sharkSize >= map[downIndex]) {
-        ret = std::min(ret, DFS(downIndex, arrivalPoint));
-    }
-
-    // left
-    int leftIndex = index - 1;
-    if (isValid(leftIndex) && index % N != 0 && visit[leftIndex] != true && sharkSize >= map[leftIndex]) {
-        ret = std::min(ret, DFS(leftIndex, arrivalPoint));
-    }
-
-    visit[index] = false;
-
-    return ret;
+    return dijkstra[target];
 }
 
 void loop() {
     while (true) {
         // 가장 index가 작은 것 들 중에서 먹을 수 있는 물고기 검색
-        find();
+        find(); // O(n^2 * n)?
         if (minIndex == -1) break; // 목표 X
 
         // if (target == -1) break;
