@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <climits>
+#include <queue>
+#include <algorithm>
 
 const int size = 20; // 최대 20까지
 
@@ -29,25 +31,11 @@ int eatCount = 0;
 int minIndex = -1;
 int minPath = INT_MAX;
 
-int DFS(int, int, int);
-int doDijkstra(int, int);
-
-std::vector<int> fishes;
+void BFS(int);
 
 // 가장 가까운 물고기를 먹고, 만약 거리가 동일하다면 왼쪽 위부터 먹음
 void find() {
-    minIndex = -1;
-    minPath = INT_MAX;
-    for (int i = 0; i < N * N; i++) {
-        int fish = map[i];
-        if (fish != 0 && map[i] < sharkSize) {
-            int res = doDijkstra(curIndex, i);
-            if (res < minPath) {
-                minIndex = i;
-                minPath = res;
-            }
-        }
-    }
+    BFS(curIndex);
 }
 
 bool isValid(int index) {
@@ -55,59 +43,76 @@ bool isValid(int index) {
 }
 
 bool visit[size * size];
-int dijkstra[size * size];
+int BFSMap[size * size];
 
-const int INVALID_VALUE = 1000000;
+bool compare(std::pair<int, int> a, std::pair<int, int> b) {
+    return a.first == b.first ? a.first > b.first : a.second > b.second;
+}
 
-int doDijkstra(int start, int target) { // 시작점
-    std::fill_n(dijkstra, N * N, INT_MAX);
+void BFS(int start) {
+    std::queue<int> q;
+
     std::fill_n(visit, N * N, false);
+    std::fill_n(BFSMap, N * N, 0);
+    minIndex = -1;
 
-    dijkstra[start] = 0;
+    q.push(start);
+    visit[start] = true;
 
-    while (true) {
-        int index = -1;
-        int maxVal = INT_MAX;
+    std::vector< std::pair<int, int> > fishes; // pair<걸리는 시간, index>
 
-        for (int i = 0; i < N * N; i++) {
-            if (visit[i] != true && dijkstra[i] < maxVal) {
-                index = i;
-                maxVal = dijkstra[i];
-            }
+
+    while (q.size() > 0) {
+        int index = q.front();
+
+        if (map[index] < sharkSize && map[index] != 0 && index != curIndex) {
+            std::pair<int, int> p;
+            p.first = BFSMap[index]; // 걸리는 길이
+            p.second = index; // 상단 왼쪽 위치
+            fishes.push_back(p);
         }
 
-        if (index == -1) break;
-
+        // top
         int topIndex = index - N;
-        if (isValid(topIndex) && visit[topIndex] != true) {
-            if (map[topIndex] <= sharkSize)
-                dijkstra[topIndex] = std::min(dijkstra[topIndex], dijkstra[index] + 1);
+        if (isValid(topIndex) && visit[topIndex] != true && map[topIndex] <= sharkSize) {
+            visit[topIndex] = true;
+            BFSMap[topIndex] = BFSMap[index] + 1;
+            q.push(topIndex);
         }
 
-        int rightIndex = index + 1;
-        if (isValid(rightIndex) && visit[rightIndex] != true && rightIndex % N != 0) {
-            if (map[rightIndex] <= sharkSize)
-                dijkstra[rightIndex] = std::min(dijkstra[rightIndex], dijkstra[index] + 1);
-        }
-
-        int bottomIndex = index + N;
-        if (isValid(bottomIndex) && visit[bottomIndex] != true) {
-            if (map[bottomIndex] <= sharkSize)
-                dijkstra[bottomIndex] = std::min(dijkstra[bottomIndex], dijkstra[index] + 1);
-        }
-
+        // left
         int leftIndex = index - 1;
-        if (isValid(leftIndex) && visit[leftIndex] != true && index % N != 0) {
-            if (map[leftIndex] <= sharkSize)
-                dijkstra[leftIndex] = std::min(dijkstra[leftIndex], dijkstra[index] + 1);
+        if (isValid(leftIndex) && visit[leftIndex] != true && index % N != 0 && map[leftIndex] <= sharkSize) {
+            visit[leftIndex] = true;
+            BFSMap[leftIndex] = BFSMap[index] + 1;
+            q.push(leftIndex);
         }
 
-        visit[index] = true;
+        // right
+        int rightIndex = index + 1;
+        if (isValid(rightIndex) && visit[rightIndex] != true && rightIndex % N != 0 && map[rightIndex] <= sharkSize) {
+            visit[rightIndex] = true;
+            BFSMap[rightIndex] = BFSMap[index] + 1;
+            q.push(rightIndex);
+        }
 
-        if (index == target) break;
+        // down
+        int downIndex = index + N;
+        if (isValid(downIndex) && visit[downIndex] != true && map[downIndex] <= sharkSize) {
+            visit[downIndex] = true;
+            BFSMap[downIndex] = BFSMap[index] + 1;
+            q.push(downIndex);
+        }
+
+        q.pop();
     }
 
-    return dijkstra[target];
+    if (fishes.size() > 0) {
+        std::sort(fishes.begin(), fishes.end(), compare);
+        auto first_elem = fishes.front();
+        minPath = first_elem.first;
+        minIndex = first_elem.second;
+    }
 }
 
 void loop() {

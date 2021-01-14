@@ -1,6 +1,17 @@
 {
     "files.associations": {
         "vector": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "algorithm": "cpp",
+        "limits": "cpp",
+        "utility": "cpp",
+        "climits": "cpp",
+        "deque": "cpp",
+        "type_traits": "cpp",
+        "unordered_map": "cpp",
+        "xlocmon": "cpp",
+        "xmemory": "cpp",
+        "xlocale": "cpp",
+        "xstring": "cpp"
     }
 }
