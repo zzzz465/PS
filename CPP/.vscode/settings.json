@@ -12,6 +12,9 @@
         "xlocmon": "cpp",
         "xmemory": "cpp",
         "xlocale": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "map": "cpp",
+        "xtree": "cpp",
+        "xloctime": "cpp"
     }
 }
