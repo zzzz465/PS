@@ -7,26 +7,21 @@ string s1, s2;
 
 int memo[1000][1000];
 
-int findLongest(int index1, int index2, int count) {
-    if (index1 >= s1.size() || index2 >= s2.size()) return count;
+int findLongest(int index1, int index2) {
+    if (index1 < 0 || index2 < 0) return 0;
 
     char c1 = s1.at(index1);
+    char c2 = s2.at(index2);
 
-    int& max_len = memo[index1][index2];
-    if (max_len != -1) return max_len;
-    max_len = 0;
+    int& ret = memo[index1][index2];
+    if (ret != -1) return ret;
 
-    for (int i = index2; i < s2.size(); i++) {
-        if (s2.at(i) == c1) {
-            // 선택하냐, 안하냐로 갈림
-            max_len = max(max_len, findLongest(index1+1, i+1, count+1));
-            break;
-        }
-    }
+    if (c1 == c2)
+         ret = findLongest(index1-1, index2-1) + 1;
+    else
+        ret = max(findLongest(index1-1, index2), findLongest(index1, index2-1));
 
-    max_len = max(max_len, findLongest(index1+1, index2, count));
-
-    return max_len;
+    return ret;
 }
 
 int main() {
@@ -36,8 +31,16 @@ int main() {
         for (int j = 0; j < 1000; j++)
             memo[i][j] = -1;
 
-    int result = findLongest(0, 0, 0);
+    int result = findLongest(s1.size() - 1, s2.size() - 1);
     cout << result;
+/*
+    for (int i = 0; i < s1.size(); i++) {
+        for (int j = 0; j < s2.size(); j++) {
+            cout << memo[i][j] << " ";
+        }
+        cout << "\n";
+    }
+*/
 
     return 0;
 }
