@@ -48,6 +48,28 @@ def make_table(li, start, end, depth, max_depth):
     return d
 
 def binary_search(li, start, end, value):
+    lo = start
+    hi = end
+
+    while lo <= hi:
+        index = int((lo + hi) / 2)
+        val = li[index][4]
+        if val > value:
+            hi = index - 1
+        elif val < value:
+            lo = index + 1
+        else:
+            lo = index
+            break
+
+    if lo > end:
+        return 0
+
+    if li[lo][4] >= value:
+        return end - lo + 1
+    else:
+        return end - lo
+    '''
     candidates = [*map(lambda x: x[4], li[start:end+1])]
     index = bisect.bisect_left(candidates, value)
     if index == len(candidates):
@@ -56,6 +78,7 @@ def binary_search(li, start, end, value):
         return len(candidates) - index
     else:
         return len(candidates) - index - 1
+    '''
 
 def find(li, table: Dict, query):
     count = 0
