@@ -1,39 +1,28 @@
-function countTriplets(arr, r) { // number[], number
-    const map = new Map()
-    for (const val of arr) {
-        if (!map.has(val))
-            map.set(val, 0)
-        
-        map.set(val, map.get(val) + 1)
-    }
+function countInversions(arr) {
+    let counter = new Array(16)
+    counter.fill(0)
 
-    const keys = [...map.keys()]
+    for (const val of arr)
+        counter[val]++
 
-    function findTriplets(key) {
-        let result = map.get(key)
-        let nextValue = key * r
-        let found = true
-        for (let i = 1; i < 3; i++) {
-            if (map.has(nextValue)) {
-                result *= map.get(nextValue)
-                nextValue *= r
-            } else {
-                found = false
-                break
-            }
+    let inversionsCount = 0
+
+    for (let i = 0; i < arr.length; i++) {
+        let lower = 0
+        for (let j = 0; j < i; j++) {
+            if (arr[j] < arr[i])
+                lower++
         }
 
-        if (found)
-            return result
-        else
-            return 0
+        let required = 0
+        for (let j = 1; j < arr[i]; j++)
+            required += counter[j]
+
+        if (required - lower > 0)
+            inversionsCount += required - lower
     }
 
-    let totalCount = 0
-    for (const key of keys)
-        totalCount += findTriplets(key)
-
-    return totalCount
+    return inversionsCount
 }
 
-console.log(countTriplets([1, 5, 5, 25, 125], 5))
+console.log(countInversions([2, 1, 3, 1, 2]))
