@@ -1,23 +1,51 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <valarray>
 
-std::vector<int> preorder, inorder;
+using namespace std;
 
-int nodes[1000];
+void DFS(vector<int> prefixes, vector<int> infixes) {
+    if (prefixes.size() == 0) return;
 
-void solve(std::vector<int>& preorder, std::vector<int>& inorder) {
-    std::vector<int> pre, in;
+    int head = prefixes.front();
+    auto infixHeadIt = find(infixes.begin(), infixes.end(), head);
 
-    int headVal = preorder[0];
-    auto it = std::find(inorder.begin(), inorder.end(), headVal);
+    auto leftInfixes = vector<int>(infixes.begin(), infixHeadIt); // end Index will **not** be included
+    auto rightInfixes = vector<int>(infixHeadIt + 1, infixes.end());
 
-    std::slice();
+    auto leftPrefixes = vector<int>(prefixes.begin() + 1, prefixes.begin() + 1 + leftInfixes.size());
+    auto rightPrefixes = vector<int>(prefixes.begin() + 1 + leftInfixes.size(), prefixes.end());
+
+    DFS(leftPrefixes, leftInfixes);
+    DFS(rightPrefixes, rightInfixes);
+
+    cout << head << " ";
+}
+
+void run() {
+    int N;
+    cin >> N;
+
+    vector<int> prefixes;
+    vector<int> infixes;
+
+    for (int i = 0; i < N; i++) {
+        int val; cin >> val;
+        prefixes.push_back(val);
+    }
+
+    for (int i = 0; i < N; i++) {
+        int val; cin >> val;
+        infixes.push_back(val);
+    }
+
+    DFS(prefixes, infixes);
+    cout << "\n";
 }
 
 int main() {
     int T;
+<<<<<<< HEAD
     std::cin >> T;
 
     for (int i = 0; i < T; i++) {
@@ -39,6 +67,12 @@ int main() {
 
         solve();
     }
+=======
+    cin >> T;
+
+    for (int i = 0; i < T; i++)
+        run();
+>>>>>>> a9c908feb6b571d9a98d27f0b70621cf3b88bbc7
 
     return 0;
 }
