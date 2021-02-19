@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "utility": "cpp"
-    }
+    },
+    "python.pythonPath": "c:\\python\\python39\\python.exe"
 }
