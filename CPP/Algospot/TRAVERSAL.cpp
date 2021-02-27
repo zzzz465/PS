@@ -45,10 +45,34 @@ void run() {
 
 int main() {
     int T;
+<<<<<<< HEAD
+    std::cin >> T;
+
+    for (int i = 0; i < T; i++) {
+        int N, val;
+        std::cin >> N;
+        preorder.clear();
+        inorder.clear();
+        std::fill_n(nodes, sizeof(nodes) / sizeof(int), -1);
+
+        for (int j = 0; j < N; j++) {
+            std::cin >> val;
+            preorder.push_back(val);
+        }
+
+        for (int j = 0; j < N; j++) {
+            std::cin >> val;
+            inorder.push_back(val);
+        }
+
+        solve();
+    }
+=======
     cin >> T;
 
     for (int i = 0; i < T; i++)
         run();
+>>>>>>> a9c908feb6b571d9a98d27f0b70621cf3b88bbc7
 
     return 0;
 }
