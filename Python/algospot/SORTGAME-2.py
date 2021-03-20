@@ -1,5 +1,5 @@
 from collections import deque
-
+# li 라는 배열을, start index 부터 end index 까지 reverse
 def reverse(li, start, end):
     lo = start
     hi = end
