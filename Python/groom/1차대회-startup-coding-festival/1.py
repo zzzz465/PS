@@ -7,7 +7,7 @@ timeArray = [0] * (24 * 60) # 분 단위로 계산, 00:00 ~ 23:59
 def timeStringToTimeArray(data: str):
     start, end = [*map(lambda text: text.strip().split(':'), data.split('~'))]
     startTime = int(start[0]) * 60 + int(start[1])
-    endTime = int(end[0]) * 60 + int(end[1])
+    endTime = int(end[0]) * 60 + int(end[1])2
 
     return [startTime, endTime]
 
