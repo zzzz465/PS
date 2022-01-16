@@ -1,6 +1,8 @@
-from collections import deque
 import sys
+from collections import deque
+
 sys.setrecursionlimit
+
 
 class TreeNode:
     def __init__(self, value, depth):
@@ -9,14 +11,16 @@ class TreeNode:
         self.right = None
         self.depth = depth
 
+
 def inorderDFS(root, li):
     if root.left != None:
         inorderDFS(root.left, li)
-    
-    li.append(root.value)
-    
+
+    li.append(root.type)
+
     if root.right != None:
         inorderDFS(root.right, li)
+
 
 def swapNodes(indexes, queries):
     # 트리 구조 만들기
@@ -35,18 +39,18 @@ def swapNodes(indexes, queries):
             newNode = TreeNode(right, curr.depth + 1)
             curr.right = newNode
             q.append(newNode)
-    
+
     result = []
 
     for query in queries:
         q = deque([root])
         while len(q) > 0:
             curr = q.popleft()
-            if curr.depth % query == 0: # 배수
+            if curr.depth % query == 0:  # 배수
                 temp = curr.left
                 curr.left = curr.right
                 curr.right = temp
-    
+
             if curr.left != None:
                 q.append(curr.left)
 
@@ -58,6 +62,7 @@ def swapNodes(indexes, queries):
         result.append(res)
 
     return result
+
 
 swapNodes([
     [2, 3],
