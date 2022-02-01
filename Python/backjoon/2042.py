@@ -120,7 +120,7 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
         left = getInternal(tree_start, tree_mid,
                            range_start, tree_mid, node * 2)
         right = getInternal(tree_mid + 1, tree_end,
-                            tree_mid + 1, tree_end, node * 2 + 1)
+                            tree_mid + 1, range_end, node * 2 + 1)
 
         value = left + right
 
