@@ -29,9 +29,9 @@ def get_tree_height(leaf_count: int):
 
 # tree definition
 # tree is always full(complete?) tree
-tree_height = get_tree_height(N)
-tree_leaf_node_count = 2 ** (tree_height - 1)
-tree_nodes_count = (2 ** (tree_height + 1) + 1)
+tree_height: int = get_tree_height(N)
+tree_leaf_node_count: int = 2 ** (tree_height - 1)
+tree_nodes_count: int = 2 ** (tree_height + 1) + 1
 tree = [[0, False] for _ in range(tree_nodes_count)]  # starts from 1
 
 
