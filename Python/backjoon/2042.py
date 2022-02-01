@@ -89,7 +89,7 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
 
     value: Optional[int] = None
 
-    # 1. tree start ~ end 사이에 range 가 들어가 있을 경우
+    # 1. tree start ~ end 이 range start ~ end 을 포함할 경우
     if tree_start <= range_start and range_end <= tree_end:
         tree_mid = (tree_start + tree_end) // 2
         left = getInternal(tree_start, tree_mid, range_start, range_end, node * 2)
@@ -110,6 +110,8 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
         right = getInternal(tree_mid + 1, tree_end, tree_mid + 1, range_end, node * 2 + 1)
 
         value = left + right
+
+    # 4. tree 
 
     setNode(node, value)
     return value
