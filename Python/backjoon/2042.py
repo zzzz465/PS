@@ -81,6 +81,9 @@ def get(start: int, end: int) -> bool:
 
 
 def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, node: int) -> int:
+    if range_start > range_end:
+        return 0
+
     if dirty(node):
         value: Optional[int] = None
 
@@ -93,18 +96,20 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
             value = left + right
 
         # 2. tree start ~ end 밖에 range 가 들어가 있을 경우
-        if tree_start > range_start or tree_end < range_end:
+        elif tree_start > range_end or tree_end < range_start:
             value = 0
 
         # 3. tree start ~ end 와 range start ~ end 가 걸쳐 있을 경우
+        # 윗 쪽에서, 서로 range start ~ end 의 역전이 일어났는 지를 검사한다
+        else:
+            tree_mid = (tree_start + tree_end) // 2
 
-        tree_mid = (tree_start + tree_end) // 2
-        range_mid = (range_start + range_end) // 2
+            left = getInternal(tree_start, tree_mid, range_start, tree_mid, node * 2)
+            right = getInternal(tree_mid + 1, tree_end, tree_mid + 1, range_end, node * 2 + 1)
 
-        left = getInternal(tree_start, tree_mid, range_start, range_mid, node * 2)
-        right = getInternal(tree_mid + 1, tree_end, range_mid + 1, range_end, node * 2 + 1)
+            value = left + right
 
-        setNode(node, left + right)
+        setNode(node, value)
 
     return tree[node][0]
 
