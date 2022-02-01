@@ -23,7 +23,7 @@ def get_tree_height(leaf_count: int):
             return count + 1
 
 tree_height = get_tree_height(N)
-tree = [None] * (2 ** (tree_height + 1) + 1) # starts from 1
+tree = [(True, 0)] * (2 ** (tree_height + 1) + 1) # starts from 1
 
 '''
 start:  leaf node range start
@@ -45,27 +45,40 @@ def updateInternal(start: int, end: int, node: int, index: int, value: int):
 
     mid = (start + end) // 2
 
+    tree[node] = (False, tree[node][1]) # invalidate memoized value
+
     if index > mid:
         return updateInternal(mid + 1, end, node * 2, index, value)
     else:
         return updateInternal(start, mid, node * 2 + 1, index, value)
 
+def invalidate(node: int):
+    tree[node] = (tree[node][0], False)
+
 '''
 get value of index, memo partial sum.
 '''
-def getMemoizedInternal(start: int, end: int, node: int, index: int):
+def getMemoizedInternal(start: int, end: int, node: int):
     if start == end:
         return tree[node]
+    elif start > end:
+        return 0
 
     if not memoized(node) or dirty(node):
-        pass
-    pass
+        mid = (start + end) // 2
+
+        left = getMemoizedInternal(start, mid, node * 2)
+        right = getMemoizedInternal(start, mid, node * 2 + 1)
+
+        tree[node] = left + right
+
+    return tree[node]
 
 def memoized(node: int):
     if tree[node] == None:
         return False
 
-    pass
+    return tree[node][1]
 
 def dirty(node: int):
     if tree[node] == None:
