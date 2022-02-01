@@ -40,7 +40,7 @@ update(0, N-1, 1, K, value) # 0, N-1, 1, K 는 고정
 
 
 def update(index: int, value: int):
-    return updateInternal(start=0, end=N-1, node=1, index=index, value=value)
+    return updateInternal(start=1, end=N, node=1, index=index, value=value)
 
 
 def updateInternal(start: int, end: int, node: int, index: int, value: int):
