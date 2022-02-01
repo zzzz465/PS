@@ -29,6 +29,9 @@ def get_tree_height(leaf_count: int):
 tree = []
 tree_height = get_tree_height(N)
 
+def insert(index: int, value: int, depth: int):
+    pass
+
 def insert(index: int, value: int):
 
     pass
