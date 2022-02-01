@@ -12,17 +12,22 @@ K: 구간의 합을 구하는 횟수
 B+ tree 를 구현하면 될 것 같지 않은가?
 '''
 
-tree = []
+def get_tree_height(leaf_count: int):
+    if leaf_count <= 0:
+        return 0
 
-def leaf_depth(leaf_count: int):
+    if leaf_count == 1:
+        return 1
+
     count = 1
     while True:
         if 2 ** count < leaf_count:
             count += 1
         else:
-            return count + 3
+            return count + 1
 
-print(leaf_depth(4))
+tree = []
+tree_height = get_tree_height(N)
 
 def insert(index: int, value: int):
 
