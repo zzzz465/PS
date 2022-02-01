@@ -74,7 +74,7 @@ get value of index, memo partial sum.
 
 
 def get(start: int, end: int) -> bool:
-    return getInternal(tree_start=start, tree_end=end, node=1)
+    return getInternal(tree_start=1, tree_end=2 ** (tree_height - 1), range_start=start, range_end=end, node=1)
 
 
 def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, node: int) -> int:
