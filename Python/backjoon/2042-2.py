@@ -25,6 +25,9 @@ def update(start: int, end: int, node: int, index: int, value: int):
 
 
 def query(start: int, end: int, node: int, range_start: int, range_end: int):
+    if end < range_start or start > range_end:
+        return 0
+
     if start == range_start and end == range_end:
         return tree[node]
 
