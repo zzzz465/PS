@@ -28,8 +28,8 @@ tree_height = get_tree_height(N)
 tree = [(0, False)] * (2 ** (tree_height + 1) + 1)  # starts from 1
 
 '''
-start:  leaf node range start
-end:    leaf node range end
+leaf_start:  leaf node range start
+leaf_end:    leaf node range end, leaf_start ~ leaf_end must be 2^n
 node:   current node index
 index:  target leaf node index
 value:  value to assign to leaf_node[index]
@@ -40,24 +40,24 @@ update(0, N-1, 1, K, value) # 0, N-1, 1, K 는 고정
 
 
 def update(index: int, value: int):
-    return updateInternal(start=1, end=2 ** (tree_height - 1), node=1, index=index, value=value)
+    return updateInternal(leaf_start=1, leaf_end=2 ** (tree_height - 1), node=1, index=index, value=value)
 
 
-def updateInternal(start: int, end: int, node: int, index: int, value: int):
-    print(f'update start: {start} end: {end} node: {node} index: {index} value: {value}')
+def updateInternal(leaf_start: int, leaf_end: int, node: int, index: int, value: int):
+    print(f'update start: {leaf_start} end: {leaf_end} node: {node} index: {index} value: {value}')
 
-    if start == end:
+    if leaf_start == leaf_end:
         tree[node] = value
         return
 
     invalidate(node)
 
-    mid = (start + end) // 2
+    mid = (leaf_start + leaf_end) // 2
 
     if index <= mid: # left
-        return updateInternal(start, mid, node * 2, index, value)
+        return updateInternal(leaf_start, mid, node * 2, index, value)
     else: # right
-        return updateInternal(mid + 1, end, node * 2 + 1, index, value)
+        return updateInternal(mid + 1, leaf_end, node * 2 + 1, index, value)
 
 
 def invalidate(node: int):
@@ -74,20 +74,20 @@ get value of index, memo partial sum.
 
 
 def get(start: int, end: int) -> bool:
-    return getInternal(start=start, end=end, node=1)
+    return getInternal(tree_start=start, tree_end=end, node=1)
 
 
-def getInternal(start: int, end: int, node: int) -> int:
-    if start == end:
+def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, node: int) -> int:
+    if range_start == range_end:
         return tree[node]
-    elif start > end:
-        return 0
+    elif range_start == range_end:
+        return tree[node]
 
     if dirty(node):
-        mid = (start + end) // 2
+        mid = (tree_start + tree_end) // 2
 
-        left = getInternal(start, mid, node * 2)
-        right = getInternal(mid + 1, end, node * 2 + 1)
+        left = getInternal(tree_start, mid, node * 2)
+        right = getInternal(mid + 1, tree_end, node * 2 + 1)
 
         setNode(node, left + right)
 
