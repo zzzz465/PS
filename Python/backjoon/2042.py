@@ -19,7 +19,10 @@ def leaf_depth(leaf_count: int):
     while True:
         if 2 ** count < leaf_count:
             count += 1
-        else:ASDFasdfasdf
+        else:
+            return count + 3
+
+print(leaf_depth(4))
 
 def insert(index: int, value: int):
 
