@@ -64,7 +64,7 @@ def updateInternal(tree_start: int, tree_end: int, curr_node: int, target_index:
 
 
 def invalidate(node: int):
-    tree[node] = (tree[node][0], False)
+    tree[node][1] = False
 
 
 def getNodeValue(node: int):
@@ -72,7 +72,8 @@ def getNodeValue(node: int):
 
 
 def setNodeValue(node: int, value: int):
-    tree[node] = (value, True)
+    tree[node][0] = value
+    tree[node][1] = True
 
 
 '''
@@ -81,7 +82,7 @@ get value of index, memo partial sum.
 
 
 def get(start: int, end: int) -> bool:
-    return getInternal(tree_start=1, tree_end=2 ** (tree_height - 1), range_start=start, range_end=end, node=1)
+    return getInternal(tree_start=1, tree_end=tree_nodes_count, range_start=start, range_end=end, node=1)
 
 
 def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, node: int) -> int:
