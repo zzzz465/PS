@@ -1,10 +1,12 @@
 N, K, M = map(int, input().split())
 
 leaf_nodes_count = 1
+tree_height = 1
 while leaf_nodes_count < N:
     leaf_nodes_count *= 2
+    tree_height += 1
 
-tree_nodes_count = leaf_nodes_count - 1
+tree_nodes_count = 2 ** (tree_height) - 1
 
 
 tree = [0] * (tree_nodes_count + 1)
