@@ -23,18 +23,18 @@ def get_tree_height(leaf_count: int):
             return count + 1
 
 tree_height = get_tree_height(N)
-tree = [None] * (2 ** tree_height)
+tree = [None] * (2 ** (tree_height + 1))
 
-def insert(start: int, end: int, index: int, value: int):
+def update(start: int, end: int, index: int, value: int):
     if start == index:
         tree[start] = value
 
     mid = (start + end) // 2
 
     if index > (mid + 1):
-        return insert(mid + 1, end, index, value)
+        return update(mid + 1, end, index, value)
     else:
-        return insert(start, mid, index, value)
+        return update(start, mid, index, value)
 
 for i in range(N):
     int(input())
