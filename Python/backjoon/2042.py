@@ -55,9 +55,9 @@ def updateInternal(leaf_start: int, leaf_end: int, node: int, index: int, value:
 
     mid = (leaf_start + leaf_end) // 2
 
-    if index <= mid: # left
+    if index <= mid:  # left
         return updateInternal(leaf_start, mid, node * 2, index, value)
-    else: # right
+    else:  # right
         return updateInternal(mid + 1, leaf_end, node * 2 + 1, index, value)
 
 
@@ -65,7 +65,11 @@ def invalidate(node: int):
     tree[node] = (tree[node][0], False)
 
 
-def setNode(node: int, value: int):
+def getNodeValue(node: int):
+    return tree[node][0]
+
+
+def setNodeValue(node: int, value: int):
     tree[node] = (value, True)
 
 
@@ -79,25 +83,32 @@ def get(start: int, end: int) -> bool:
 
 
 def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, node: int) -> int:
+    # tree start ~ end: set A
+    # range start ~ end: set B
+
     if range_start > range_end or tree_start > range_end:
         return 0
     elif tree_start > range_end or tree_end < range_start:
         return 0
 
-    if tree_start == tree_end: # leaf node
+    if tree_start == tree_end:  # leaf node
         return tree[node]
+    elif tree_start == range_start and tree_end == range_end and not dirty(node):
+        return getNodeValue(node)
 
     value: Optional[int] = None
 
-    # 1. tree start ~ end 이 range start ~ end 을 포함할 경우
+    # 1. tree start ~ end 이 range start ~ end 을 포함할 경우 (A includes B)
     if tree_start <= range_start and range_end <= tree_end:
         tree_mid = (tree_start + tree_end) // 2
-        left = getInternal(tree_start, tree_mid, range_start, range_end, node * 2)
-        right = getInternal(tree_mid + 1, tree_end, range_start, range_end, node * 2 + 1)
+        left = getInternal(tree_start, tree_mid,
+                           range_start, range_end, node * 2)
+        right = getInternal(tree_mid + 1, tree_end,
+                            range_start, range_end, node * 2 + 1)
 
         value = left + right
 
-    # 2. tree start ~ end 밖에 range 가 들어가 있을 경우
+    # 2. tree start ~ end 가 range start ~ end 와 전혀 연관이 없을 경우 (A intersection B = None)
     elif tree_start > range_end or tree_end < range_start:
         value = 0
 
@@ -106,14 +117,18 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
     else:
         tree_mid = (tree_start + tree_end) // 2
 
-        left = getInternal(tree_start, tree_mid, range_start, tree_mid, node * 2)
-        right = getInternal(tree_mid + 1, tree_end, tree_mid + 1, range_end, node * 2 + 1)
+        left = getInternal(tree_start, tree_mid,
+                           range_start, tree_mid, node * 2)
+        right = getInternal(tree_mid + 1, tree_end,
+                            tree_mid + 1, range_end, node * 2 + 1)
 
         value = left + right
 
-    # 4. tree 
+    # 4. B includes A
+    # 존재 불가능함
 
-    setNode(node, value)
+    setNodeValue(node, value)
+
     return value
 
 
@@ -122,6 +137,7 @@ def dirty(node: int):
         return True
 
     return tree[node][1] == False
+
 
 for i in range(1, 2 ** (tree_height - 1) + 1):
     update(i, 0)
