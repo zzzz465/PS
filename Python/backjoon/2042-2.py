@@ -43,7 +43,7 @@ def query(start: int, end: int, node: int, range_start: int, range_end: int):
     mid = (start + end) // 2
 
     left = query(start, mid, node * 2, range_start, mid)
-    right = query(mid + 1, end, node * 2 + 1, mid + 1, end)
+    right = query(mid + 1, end, node * 2 + 1, mid + 1, range_end)
 
     return left + right
 
