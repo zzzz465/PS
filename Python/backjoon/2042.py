@@ -13,13 +13,15 @@ B+ tree 를 구현하면 될 것 같지 않은가?
 
 tree = []
 
-def leaf_depth():
-    _N = N
+def leaf_depth(leaf_count: int):
     count = 0
-    while _N > 0:
-        _N = _N // 2
+    while leaf_count > 0:
+        leaf_count = leaf_count // 2
         count += 1
-    pass
+    
+    return count
+
+print(leaf_depth(4))
 
 def insert(index: int, value: int):
 
