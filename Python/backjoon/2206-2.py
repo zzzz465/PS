@@ -37,15 +37,12 @@ def visit(y: int, x: int, score: int, pickaxe_used: bool):
         queue.append((y, x, score + 1, pickaxe_used))
         visited[(y, x, pickaxe_used)] = score + 1
 
-max_score = -sys.maxsize
-
 while len(queue) > 0:
     y, x, score, pickaxe_used = queue.popleft()
 
-    print(f'visit {(y, x)}, score: {score}, used: {pickaxe_used}')
+    # print(f'visit {(y, x)}, score: {score}, used: {pickaxe_used}')
 
     if y == N - 1 and x == M - 1:
-        max_score = max(max_score, score)
         continue
 
     # up
