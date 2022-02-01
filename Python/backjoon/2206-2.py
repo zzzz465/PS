@@ -3,7 +3,7 @@ N, M = map(int, input().split())
 arr = [None] * N
 
 for i in range(N):
-    arr[i] = list(map(int, input().split()))
+    arr[i] = list(map(int, [*input()]))
 
 VALID_TILE = 0
 INVALID_TILE = 1
@@ -24,11 +24,13 @@ def visit(y: int, x: int, score: int, pickaxe_used: bool):
     # is valid?
     if y < 0 or y >= N or x < 0 or x >= M:
         return
+    elif max_score != -sys.maxsize and score >= max_score:
+        return
 
     if arr[y][x] == INVALID_TILE and not pickaxe_used:
         queue.append((y, x, score + 1, True))
-
-    queue.append((y, x, score + 1, True))
+    else:
+        queue.append((y, x, score + 1, pickaxe_used))
 
 max_score = -sys.maxsize
 
