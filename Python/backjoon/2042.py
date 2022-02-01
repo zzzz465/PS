@@ -130,6 +130,9 @@ for i in range(1, N + 1):
     val = int(input())
     update(i, val)
 
+for i in range(1, 2 ** (N - 1)):
+    pass
+
 for _ in range(M + K):
     a, b, c = map(int, input().split())
 
