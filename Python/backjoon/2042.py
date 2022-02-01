@@ -87,34 +87,32 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
     if tree_start == tree_end: # leaf node
         return tree[node]
 
-    if dirty(node):
-        value: Optional[int] = None
+    value: Optional[int] = None
 
-        # 1. tree start ~ end 사이에 range 가 들어가 있을 경우
-        if tree_start <= range_start and range_end <= tree_end:
-            tree_mid = (tree_start + tree_end) // 2
-            left = getInternal(tree_start, tree_mid, range_start, range_end, node * 2)
-            right = getInternal(tree_mid + 1, tree_end, range_start, range_end, node * 2 + 1)
+    # 1. tree start ~ end 사이에 range 가 들어가 있을 경우
+    if tree_start <= range_start and range_end <= tree_end:
+        tree_mid = (tree_start + tree_end) // 2
+        left = getInternal(tree_start, tree_mid, range_start, range_end, node * 2)
+        right = getInternal(tree_mid + 1, tree_end, range_start, range_end, node * 2 + 1)
 
-            value = left + right
+        value = left + right
 
-        # 2. tree start ~ end 밖에 range 가 들어가 있을 경우
-        elif tree_start > range_end or tree_end < range_start:
-            value = 0
+    # 2. tree start ~ end 밖에 range 가 들어가 있을 경우
+    elif tree_start > range_end or tree_end < range_start:
+        value = 0
 
-        # 3. tree start ~ end 와 range start ~ end 가 걸쳐 있을 경우
-        # 윗 쪽에서, 서로 range start ~ end 의 역전이 일어났는 지를 검사한다
-        else:
-            tree_mid = (tree_start + tree_end) // 2
+    # 3. tree start ~ end 와 range start ~ end 가 걸쳐 있을 경우
+    # 윗 쪽에서, 서로 range start ~ end 의 역전이 일어났는 지를 검사한다
+    else:
+        tree_mid = (tree_start + tree_end) // 2
 
-            left = getInternal(tree_start, tree_mid, range_start, tree_mid, node * 2)
-            right = getInternal(tree_mid + 1, tree_end, tree_mid + 1, range_end, node * 2 + 1)
+        left = getInternal(tree_start, tree_mid, range_start, tree_mid, node * 2)
+        right = getInternal(tree_mid + 1, tree_end, tree_mid + 1, range_end, node * 2 + 1)
 
-            value = left + right
+        value = left + right
 
-        setNode(node, value)
-
-    return tree[node][0]
+    setNode(node, value)
+    return value
 
 
 def dirty(node: int):
