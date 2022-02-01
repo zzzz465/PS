@@ -29,7 +29,8 @@ def get_tree_height(leaf_count: int):
 
 tree_height = get_tree_height(N)
 tree_leaf_node_count = 2 ** (tree_height - 1)
-tree = [(0, False)] * (2 ** (tree_height + 1) + 1)  # starts from 1
+tree_nodes_count = (2 ** (tree_height + 1) + 1)
+tree = [[0, False] for _ in range(tree_nodes_count)]  # starts from 1
 
 '''
 leaf_start:  leaf node range start
@@ -44,22 +45,22 @@ update(0, N-1, 1, K, value) # 0, N-1, 1, K 는 고정
 
 
 def update(index: int, value: int):
-    return updateInternal(leaf_start=1, leaf_end=tree_leaf_node_count, node=1, index=index, value=value)
+    return updateInternal(tree_start=1, tree_end=tree_leaf_node_count, curr_node=1, target_index=index, value=value)
 
 
-def updateInternal(leaf_start: int, leaf_end: int, node: int, index: int, value: int):
-    if leaf_start == leaf_end:
-        tree[node] = value
+def updateInternal(tree_start: int, tree_end: int, curr_node: int, target_index: int, value: int):
+    if tree_start == tree_end:
+        tree[curr_node] = value
         return
 
-    invalidate(node)
+    invalidate(curr_node)
 
-    mid = (leaf_start + leaf_end) // 2
+    mid = (tree_start + tree_end) // 2
 
-    if index <= mid:  # left
-        return updateInternal(leaf_start, mid, node * 2, index, value)
+    if target_index <= mid:  # left
+        return updateInternal(tree_start, mid, curr_node * 2, target_index, value)
     else:  # right
-        return updateInternal(mid + 1, leaf_end, node * 2 + 1, index, value)
+        return updateInternal(mid + 1, tree_end, curr_node * 2 + 1, target_index, value)
 
 
 def invalidate(node: int):
