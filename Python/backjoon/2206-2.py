@@ -29,9 +29,10 @@ def visit(y: int, x: int, score: int, pickaxe_used: bool):
     elif visited[(y, x, pickaxe_used)] < score:
         return
 
-    if arr[y][x] == INVALID_TILE and not pickaxe_used:
-        queue.append((y, x, score + 1, True))
-        visited[(y, x, True)] = score + 1
+    if arr[y][x] == INVALID_TILE:
+        if not pickaxe_used:
+            queue.append((y, x, score + 1, True))
+            visited[(y, x, True)] = score + 1
     else:
         queue.append((y, x, score + 1, pickaxe_used))
         visited[(y, x, pickaxe_used)] = score + 1
