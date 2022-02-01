@@ -25,7 +25,7 @@ hq = []
 heapq.heappush(hq, (0, K))
 
 while len(hq) > 0:
-    _, u = hq.popleft()
+    _, u = heapq.heappop(hq)
 
     if u in visited:
         continue
