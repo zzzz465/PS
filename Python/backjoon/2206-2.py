@@ -13,10 +13,16 @@ INVALID_TILE = 1
 from collections import deque
 from typing import Set, Tuple
 
+# Tuple<y: int, x: int, score: int, pickaxe_used: bool>
 queue = deque()
 visited: Set[Tuple[int, int]] = set()
 
-queue.append()
+queue.append(())
+
+def visit(y: int, x: int, score: )
 
 while len(queue) > 0:
     score, breaked, y, x = queue.popleft()
+
+    if (y, x) in visited:
+        continue
