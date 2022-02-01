@@ -1,4 +1,5 @@
 import heapq
+from re import T
 
 
 N, M, K = map(int, input().split())
@@ -14,14 +15,11 @@ B+ tree 를 구현하면 될 것 같지 않은가?
 tree = []
 
 def leaf_depth(leaf_count: int):
-    count = 0
-    while leaf_count > 0:
-        leaf_count = leaf_count // 2
-        count += 1
-    
-    return count
-
-print(leaf_depth(1))
+    count = 1
+    while True:
+        if 2 ** count < leaf_count:
+            count += 1
+        else:ASDFasdfasdf
 
 def insert(index: int, value: int):
 
