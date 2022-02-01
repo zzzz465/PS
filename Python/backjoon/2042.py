@@ -85,7 +85,7 @@ def getInternal(start: int, end: int, node: int) -> int:
         mid = (start + end) // 2
 
         left = getInternal(start, mid, node * 2)
-        right = getInternal(start, mid, node * 2 + 1)
+        right = getInternal(mid + 1, end, node * 2 + 1)
 
         setNode(node, left + right)
 
