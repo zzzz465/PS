@@ -42,8 +42,12 @@ def query(start: int, end: int, node: int, range_start: int, range_end: int):
 
     mid = (start + end) // 2
 
-    left = query(start, mid, node * 2, range_start, mid)
-    right = query(mid + 1, end, node * 2 + 1, mid + 1, range_end)
+    if range_start <= mid <= range_end:
+        left = query(start, mid, node * 2, range_start, mid)
+        right = query(mid + 1, end, node * 2 + 1, mid + 1, end)
+    else:
+        left = query(start, mid, node * 2, range_start, range_end)
+        right = query(mid + 1, end, node * 2 + 1, range_end, range_end)
 
     return left + right
 
