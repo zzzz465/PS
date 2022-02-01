@@ -20,11 +20,13 @@ visited: Dict[Tuple[int, int, bool], int] = defaultdict(lambda: sys.maxsize)
 
 queue.append((0, 0, 0, False))
 
+max_score = -sys.maxsize
+
 def visit(y: int, x: int, score: int, pickaxe_used: bool):
+    global max_score
+
     # is valid?
     if y < 0 or y >= N or x < 0 or x >= M:
-        return
-    elif max_score != -sys.maxsize and score >= max_score:
         return
     elif visited[(y, x, pickaxe_used)] < score:
         return
@@ -43,6 +45,7 @@ while len(queue) > 0:
     # print(f'visit {(y, x)}, score: {score}, used: {pickaxe_used}')
 
     if y == N - 1 and x == M - 1:
+        max_score = max(max_score, score)
         continue
 
     # up
@@ -60,4 +63,4 @@ while len(queue) > 0:
 if max_score == -sys.maxsize:
     print(-1)
 else:
-    print(max_score)
+    print(max_score + 1)
