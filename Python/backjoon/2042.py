@@ -26,6 +26,7 @@ def get_tree_height(leaf_count: int):
         else:
             return count + 1
 
+
 # tree definition
 # tree is always full(complete?) tree
 tree_height = get_tree_height(N)
@@ -133,19 +134,18 @@ def dirty(node: int):
     return tree[node][1] == False
 
 
-def main():
-    for i in range(1, 2 ** (tree_height - 1) + 1):
-        update(i, 0)
+for i in range(1, 2 ** (tree_height - 1) + 1):
+    update(i, 0)
 
-    for i in range(1, N + 1):
-        val = int(input())
-        update(i, val)
+for i in range(1, N + 1):
+    val = int(input())
+    update(i, val)
 
-    for _ in range(M + K):
-        a, b, c = map(int, input().split())
+for _ in range(M + K):
+    a, b, c = map(int, input().split())
 
-        if a == 1:
-            update(b, c)
-        else:
-            res = get(b, c)
-            print(res)
+    if a == 1:
+        update(b, c)
+    else:
+        res = get(b, c)
+        print(res)
