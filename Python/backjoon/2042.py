@@ -67,15 +67,6 @@ def invalidate(node: int):
     tree[node][1] = False
 
 
-def getNodeValue(node: int):
-    return tree[node][0]
-
-
-def setNodeValue(node: int, value: int):
-    tree[node][0] = value
-    tree[node][1] = True
-
-
 '''
 get value of index, memo partial sum.
 '''
@@ -97,7 +88,7 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
     if tree_start == tree_end:  # leaf node
         return tree[curr_node]
     elif tree_start == range_start and tree_end == range_end and not dirty(curr_node):
-        return getNodeValue(curr_node)
+        return get_node_value(curr_node)
 
     value: Optional[int] = None
 
@@ -131,9 +122,18 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
     # 존재 불가능함
 
     if tree_start == range_start and tree_end == range_end:
-        setNodeValue(curr_node, value)
+        set_node_value(curr_node, value)
 
     return value
+
+
+def get_node_value(node: int):
+    return tree[node][0]
+
+
+def set_node_value(node: int, value: int):
+    tree[node][0] = value
+    tree[node][1] = True
 
 
 def dirty(node: int):
@@ -143,18 +143,19 @@ def dirty(node: int):
     return tree[node][1] == False
 
 
-for i in range(1, 2 ** (tree_height - 1) + 1):
-    update(i, 0)
+def main():
+    for i in range(1, 2 ** (tree_height - 1) + 1):
+        update(i, 0)
 
-for i in range(1, N + 1):
-    val = int(input())
-    update(i, val)
+    for i in range(1, N + 1):
+        val = int(input())
+        update(i, val)
 
-for _ in range(M + K):
-    a, b, c = map(int, input().split())
+    for _ in range(M + K):
+        a, b, c = map(int, input().split())
 
-    if a == 1:
-        update(b, c)
-    else:
-        res = get(b, c)
-        print(res)
+        if a == 1:
+            update(b, c)
+        else:
+            res = get(b, c)
+            print(res)
