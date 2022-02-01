@@ -92,4 +92,14 @@ def dirty(node: int):
 
 
 for i in range(N):
-    int(input())
+    val = int(input())
+    update(i, val)
+
+for _ in range(M + K):
+    a, b, c = map(int, input().split())
+
+    if a == 1:
+        update(b, c)
+        pass
+    else:
+        pass
