@@ -87,7 +87,7 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
         return 0
 
     if tree_start == tree_end: # leaf node
-        return tree[tree_start]
+        return tree[node]
 
     if dirty(node):
         value: Optional[int] = None
