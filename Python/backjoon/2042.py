@@ -46,6 +46,7 @@ def update(index: int, value: int):
 def updateInternal(start: int, end: int, node: int, index: int, value: int):
     if start == end:
         tree[node] = value
+        return
 
     invalidate(node)
 
@@ -68,7 +69,13 @@ def setNode(node: int, value: int):
 '''
 get value of index, memo partial sum.
 '''
-def getMemoizedInternal(start: int, end: int, node: int):
+
+
+def get(start: int, end: int) -> bool:
+    return getInternal(start=start, end=end, node=1)
+
+
+def getInternal(start: int, end: int, node: int) -> int:
     if start == end:
         return tree[node]
     elif start > end:
@@ -77,17 +84,18 @@ def getMemoizedInternal(start: int, end: int, node: int):
     if dirty(node):
         mid = (start + end) // 2
 
-        left = getMemoizedInternal(start, mid, node * 2)
-        right = getMemoizedInternal(start, mid, node * 2 + 1)
+        left = getInternal(start, mid, node * 2)
+        right = getInternal(start, mid, node * 2 + 1)
 
         setNode(node, left + right)
 
     return tree[node][0]
 
+
 def dirty(node: int):
     if tree[node] == None:
         return True
-    
+
     return tree[node][1] == False
 
 
@@ -100,6 +108,6 @@ for _ in range(M + K):
 
     if a == 1:
         update(b, c)
-        pass
     else:
-        pass
+        res = get(b, c)
+        print(res)
