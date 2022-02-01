@@ -12,7 +12,7 @@ INVALID_TILE = 1
 
 from collections import defaultdict, deque
 import sys
-from typing import Dict, Set, Tuple
+from typing import Dict, Literal, Set, Tuple
 
 # Tuple<y: int, x: int, score: int, pickaxe_used: bool>
 queue = deque()
