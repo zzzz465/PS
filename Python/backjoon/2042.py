@@ -99,7 +99,7 @@ def dirty(node: int):
     return tree[node][1] == False
 
 
-for i in range(N):
+for i in range(1, N + 1):
     val = int(input())
     update(i, val)
 
