@@ -21,7 +21,7 @@ def leaf_depth(leaf_count: int):
     
     return count
 
-print(leaf_depth(4))
+print(leaf_depth(1))
 
 def insert(index: int, value: int):
 
