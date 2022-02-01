@@ -136,5 +136,5 @@ for _ in range(M + K):
     if a == 1:
         update(b, c)
     else:
-        res = get(min(b, c), max(b, c))
+        res = get(b, c)
         print(res)
