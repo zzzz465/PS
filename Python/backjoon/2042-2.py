@@ -61,3 +61,31 @@ for _ in range(K + M):
     else:
         res = query(1, leaf_nodes_count, 1, b, c)
         print(res)
+
+'''
+test cases
+
+#1
+5 1 2
+1
+2
+3
+4
+5
+2 5 5
+1 1 5
+2 5 5
+
+A: ?
+
+#2
+5 0 1
+1
+2
+6
+4
+2
+2 1 4
+
+A: 13
+'''
