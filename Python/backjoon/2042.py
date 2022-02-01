@@ -23,18 +23,41 @@ def get_tree_height(leaf_count: int):
             return count + 1
 
 tree_height = get_tree_height(N)
-tree = [None] * (2 ** (tree_height + 1))
+tree = [None] * (2 ** (tree_height + 1) + 1) # starts from 1
 
-def update(start: int, end: int, index: int, value: int):
-    if start == index:
+'''
+start:  leaf node range start
+end:    leaf node range end
+node:   current node index
+index:  target leaf node index
+value:  value to assign to leaf_node[index]
+
+N 개의 leaf node 에서, index K 를 업데이트 하는 방법
+update(0, N-1, 1, K, value) # 0, N-1, 1, K 는 고정
+'''
+
+def update(index: int, value: int):
+    return updateInternal(start=0, end=N-1, node=1, index=index, value=value)
+
+def updateInternal(start: int, end: int, node: int, index: int, value: int):
+    if start == end:
         tree[start] = value
 
     mid = (start + end) // 2
 
-    if index > (mid + 1):
-        return update(mid + 1, end, index, value)
+    if index > mid:
+        return updateInternal(mid + 1, end, node * 2, index, value)
     else:
-        return update(start, mid, index, value)
+        return updateInternal(start, mid, node * 2 + 1, index, value)
+
+def memoized(start: int, end: int):
+
+
+def get(start: int, end: int, index: int):
+    if start == end: # leaf node
+        return tree[start]
+
+    mid = (start + end) // 2
 
 for i in range(N):
     int(input())
