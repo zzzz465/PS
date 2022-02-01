@@ -81,7 +81,9 @@ def get(start: int, end: int) -> bool:
 
 
 def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, node: int) -> int:
-    if range_start > range_end:
+    if range_start > range_end or tree_start > range_end:
+        return 0
+    elif tree_start > range_end or tree_end < range_start:
         return 0
 
     if dirty(node):
