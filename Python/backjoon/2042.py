@@ -1,7 +1,3 @@
-import heapq
-from re import T
-
-
 N, M, K = map(int, input().split())
 
 '''
@@ -26,15 +22,19 @@ def get_tree_height(leaf_count: int):
         else:
             return count + 1
 
-tree = []
 tree_height = get_tree_height(N)
+tree = [None] * (2 ** tree_height)
 
-def insert(index: int, value: int, depth: int):
-    pass
+def insert(start: int, end: int, index: int, value: int):
+    if start == index:
+        tree[start] = value
 
-def insert(index: int, value: int):
+    mid = (start + end) // 2
 
-    pass
+    if index > (mid + 1):
+        return insert(mid + 1, end, index, value)
+    else:
+        return insert(start, mid, index, value)
 
 for i in range(N):
     int(input())
