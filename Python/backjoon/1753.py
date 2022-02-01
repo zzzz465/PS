@@ -10,7 +10,7 @@ V, E = map(int, input().split())
 K = int(input())
 
 # Dict<u, Tuple<v, w>>
-edges: Dict[Tuple[int], List[Tuple[int, int]]] = defaultdict(list)
+edges: Dict[int, List[Tuple[int, int]]] = defaultdict(list)
 
 for i in range(E):
     u, v, u = map(int, input().split())
