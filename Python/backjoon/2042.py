@@ -31,7 +31,7 @@ def get_tree_height(leaf_count: int):
 # tree is always full(complete?) tree
 tree_height: int = get_tree_height(N)
 tree_leaf_node_count: int = 2 ** (tree_height - 1)
-tree_nodes_count: int = 2 ** (tree_height + 1) + 1
+tree_nodes_count: int = 2 ** (tree_height + 1)
 tree = [[0, False] for _ in range(tree_nodes_count)]  # starts from 1
 
 
@@ -64,7 +64,7 @@ get value of index, memo partial sum.
 
 
 def get(start: int, end: int) -> bool:
-    return getInternal(tree_start=1, tree_end=tree_nodes_count, range_start=start, range_end=end, curr_node=1)
+    return getInternal(tree_start=1, tree_end=tree_leaf_node_count, range_start=start, range_end=end, curr_node=1)
 
 
 def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, curr_node: int) -> int:
@@ -128,12 +128,13 @@ def set_node_value(node: int, value: int):
 
 
 def dirty(node: int):
-    if tree[node] == None:
+    if tree[node] is None:
         return True
 
     return tree[node][1] == False
 
 
+# set all leaf nodes to 0
 for i in range(1, 2 ** (tree_height - 1) + 1):
     update(i, 0)
 
