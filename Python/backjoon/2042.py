@@ -26,22 +26,12 @@ def get_tree_height(leaf_count: int):
         else:
             return count + 1
 
-
+# tree definition
+# tree is always 
 tree_height = get_tree_height(N)
 tree_leaf_node_count = 2 ** (tree_height - 1)
 tree_nodes_count = (2 ** (tree_height + 1) + 1)
 tree = [[0, False] for _ in range(tree_nodes_count)]  # starts from 1
-
-'''
-leaf_start:  leaf node range start
-leaf_end:    leaf node range end, leaf_start ~ leaf_end must be 2^n
-node:   current node index
-index:  target leaf node index
-value:  value to assign to leaf_node[index]
-
-N 개의 leaf node 에서, index K 를 업데이트 하는 방법
-update(0, N-1, 1, K, value) # 0, N-1, 1, K 는 고정
-'''
 
 
 def update(index: int, value: int):
