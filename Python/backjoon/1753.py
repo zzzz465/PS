@@ -15,7 +15,7 @@ edges: Dict[int, List[Tuple[int, int]]] = defaultdict(list)
 for i in range(E):
     u, v, u = map(int, input().split())
 
-    edges.get(u).append((v, u))
+    edges[u].append((v, u))
 
 vertices: List[int] = [sys.maxsize for _ in range(V + 1)]
 vertices[K] = 0
