@@ -12,7 +12,7 @@ INVALID_TILE = 1
 
 from collections import defaultdict, deque
 import sys
-from typing import Dict, Literal, Set, Tuple
+from typing import Dict, Tuple
 
 # Tuple<y: int, x: int, score: int, pickaxe_used: bool>
 queue = deque()
@@ -45,8 +45,8 @@ while len(queue) > 0:
     # print(f'visit {(y, x)}, score: {score}, used: {pickaxe_used}')
 
     if y == N - 1 and x == M - 1:
-        max_score = max(max_score, score)
-        continue
+        print(score + 1)
+        exit(0)
 
     # up
     visit(y - 1, x, score, pickaxe_used)
@@ -60,7 +60,4 @@ while len(queue) > 0:
     # left
     visit(y, x - 1, score, pickaxe_used)
 
-if max_score == -sys.maxsize:
-    print(-1)
-else:
-    print(max_score + 1)
+print(-1)
