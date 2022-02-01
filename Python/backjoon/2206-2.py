@@ -26,19 +26,20 @@ def visit(y: int, x: int, score: int, pickaxe_used: bool):
         return
     elif max_score != -sys.maxsize and score >= max_score:
         return
+    elif visited[(y, x, pickaxe_used)] < score:
+        return
 
     if arr[y][x] == INVALID_TILE and not pickaxe_used:
         queue.append((y, x, score + 1, True))
+        visited[(y, x, True)] = score + 1
     else:
         queue.append((y, x, score + 1, pickaxe_used))
+        visited[(y, x, pickaxe_used)] = score + 1
 
 max_score = -sys.maxsize
 
 while len(queue) > 0:
     y, x, score, pickaxe_used = queue.popleft()
-
-    if visited[(y, x, pickaxe_used)] < score:
-        continue
 
     print(f'visit {(y, x)}, score: {score}, used: {pickaxe_used}')
 
