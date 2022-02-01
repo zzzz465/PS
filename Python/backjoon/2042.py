@@ -28,6 +28,7 @@ def get_tree_height(leaf_count: int):
 
 
 tree_height = get_tree_height(N)
+tree_leaf_node_count = 2 ** (tree_height - 1)
 tree = [(0, False)] * (2 ** (tree_height + 1) + 1)  # starts from 1
 
 '''
@@ -43,7 +44,7 @@ update(0, N-1, 1, K, value) # 0, N-1, 1, K 는 고정
 
 
 def update(index: int, value: int):
-    return updateInternal(leaf_start=1, leaf_end=2 ** (tree_height - 1), node=1, index=index, value=value)
+    return updateInternal(leaf_start=1, leaf_end=tree_leaf_node_count, node=1, index=index, value=value)
 
 
 def updateInternal(leaf_start: int, leaf_end: int, node: int, index: int, value: int):
