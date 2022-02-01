@@ -10,13 +10,13 @@ INVALID_TILE = 1
 
 # 좌측 상단 (1, 1) 에서 우측 하단 (N, N) 으로 도달하는 최소한의 거리
 
-from collections import deque
+from collections import defaultdict, deque
 import sys
-from typing import Set, Tuple
+from typing import Dict, Set, Tuple
 
 # Tuple<y: int, x: int, score: int, pickaxe_used: bool>
 queue = deque()
-visited: Set[Tuple[int, int]] = set()
+visited: Dict[Tuple[int, int, bool], int] = defaultdict(lambda: sys.maxsize)
 
 queue.append((0, 0, 0, False))
 
@@ -36,6 +36,9 @@ max_score = -sys.maxsize
 
 while len(queue) > 0:
     y, x, score, pickaxe_used = queue.popleft()
+
+    if visited[(y, x, pickaxe_used)] < score:
+        continue
 
     print(f'visit {(y, x)}, score: {score}, used: {pickaxe_used}')
 
