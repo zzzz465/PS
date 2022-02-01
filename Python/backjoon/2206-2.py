@@ -12,32 +12,35 @@ INVALID_TILE = 1
 
 from collections import defaultdict, deque
 import sys
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 # Tuple<y: int, x: int, score: int, pickaxe_used: bool>
 queue = deque()
-visited: Dict[Tuple[int, int, bool], int] = defaultdict(lambda: sys.maxsize)
+
+# List<List<[int, int]> y, x, break 에 대한 3차원 배열
+visited: List[List[List[int]]] = [None] * N
+
+for y in range(N):
+    visited[y] = [[sys.maxsize, sys.maxsize] for _ in range(M)]
 
 queue.append((0, 0, 0, False))
 
 max_score = -sys.maxsize
 
-def visit(y: int, x: int, score: int, pickaxe_used: bool):
+def visit(y: int, x: int, score: int, pickaxe_used: int):
     global max_score
 
     # is valid?
     if y < 0 or y >= N or x < 0 or x >= M:
         return
-    elif visited[(y, x, pickaxe_used)] < score:
-        return
 
     if arr[y][x] == INVALID_TILE:
         if not pickaxe_used:
             queue.append((y, x, score + 1, True))
-            visited[(y, x, True)] = score + 1
+            visited[y][x][1] = score + 1
     else:
         queue.append((y, x, score + 1, pickaxe_used))
-        visited[(y, x, pickaxe_used)] = score + 1
+        visited[y][x][pickaxe_used] = score + 1
 
 while len(queue) > 0:
     y, x, score, pickaxe_used = queue.popleft()
