@@ -127,7 +127,8 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
     # 4. B includes A
     # 존재 불가능함
 
-    setNodeValue(node, value)
+    if tree_start == range_start and tree_end == range_end:
+        setNodeValue(node, value)
 
     return value
 
