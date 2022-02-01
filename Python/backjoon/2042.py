@@ -52,10 +52,10 @@ def updateInternal(start: int, end: int, node: int, index: int, value: int):
 
     mid = (start + end) // 2
 
-    if index > mid:
-        return updateInternal(mid + 1, end, node * 2, index, value)
-    else:
-        return updateInternal(start, mid, node * 2 + 1, index, value)
+    if index <= mid: # left
+        return updateInternal(start, mid, node * 2, index, value)
+    else: # right
+        return updateInternal(mid + 1, end, node * 2 + 1, index, value)
 
 
 def invalidate(node: int):
