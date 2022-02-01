@@ -13,9 +13,9 @@ K = int(input())
 edges: Dict[int, List[Tuple[int, int]]] = defaultdict(list)
 
 for i in range(E):
-    u, v, u = map(int, input().split())
+    u, v, w = map(int, input().split())
 
-    edges[u].append((v, u))
+    edges[u].append((v, w))
 
 vertices: List[int] = [sys.maxsize for _ in range(V + 1)]
 vertices[K] = 0
@@ -35,7 +35,7 @@ while len(hq) > 0:
     vwArr = edges[u]
 
     for (v, w) in vwArr:
-        vertices[v] = max(vertices[v], vertices[u] + w)
+        vertices[v] = min(vertices[v], vertices[u] + w)
         heapq.heappush(hq, (vertices[v], v))
 
 for i in range(1, V + 1):
