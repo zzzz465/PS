@@ -47,8 +47,6 @@ def update(index: int, value: int):
 
 
 def updateInternal(leaf_start: int, leaf_end: int, node: int, index: int, value: int):
-    print(f'update start: {leaf_start} end: {leaf_end} node: {node} index: {index} value: {value}')
-
     if leaf_start == leaf_end:
         tree[node] = value
         return
@@ -125,6 +123,8 @@ def dirty(node: int):
 
     return tree[node][1] == False
 
+for i in range(1, 2 ** (tree_height - 1) + 1):
+    update(i, 0)
 
 for i in range(1, N + 1):
     val = int(input())
@@ -136,5 +136,5 @@ for _ in range(M + K):
     if a == 1:
         update(b, c)
     else:
-        res = get(b, c)
+        res = get(min(b, c), max(b, c))
         print(res)
