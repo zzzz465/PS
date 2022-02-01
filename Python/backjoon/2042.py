@@ -82,10 +82,10 @@ get value of index, memo partial sum.
 
 
 def get(start: int, end: int) -> bool:
-    return getInternal(tree_start=1, tree_end=tree_nodes_count, range_start=start, range_end=end, node=1)
+    return getInternal(tree_start=1, tree_end=tree_nodes_count, range_start=start, range_end=end, curr_node=1)
 
 
-def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, node: int) -> int:
+def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int, curr_node: int) -> int:
     # tree start ~ end: set A
     # range start ~ end: set B
 
@@ -95,9 +95,9 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
         return 0
 
     if tree_start == tree_end:  # leaf node
-        return tree[node]
-    elif tree_start == range_start and tree_end == range_end and not dirty(node):
-        return getNodeValue(node)
+        return tree[curr_node]
+    elif tree_start == range_start and tree_end == range_end and not dirty(curr_node):
+        return getNodeValue(curr_node)
 
     value: Optional[int] = None
 
@@ -105,9 +105,9 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
     if tree_start <= range_start and range_end <= tree_end:
         tree_mid = (tree_start + tree_end) // 2
         left = getInternal(tree_start, tree_mid,
-                           range_start, tree_mid, node * 2)
+                           range_start, tree_mid, curr_node * 2)
         right = getInternal(tree_mid + 1, tree_end,
-                            tree_mid + 1, range_end, node * 2 + 1)
+                            tree_mid + 1, range_end, curr_node * 2 + 1)
 
         value = left + right
 
@@ -121,9 +121,9 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
         tree_mid = (tree_start + tree_end) // 2
 
         left = getInternal(tree_start, tree_mid,
-                           range_start, tree_mid, node * 2)
+                           range_start, tree_mid, curr_node * 2)
         right = getInternal(tree_mid + 1, tree_end,
-                            tree_mid + 1, range_end, node * 2 + 1)
+                            tree_mid + 1, range_end, curr_node * 2 + 1)
 
         value = left + right
 
@@ -131,7 +131,7 @@ def getInternal(tree_start: int, tree_end: int, range_start: int, range_end: int
     # 존재 불가능함
 
     if tree_start == range_start and tree_end == range_end:
-        setNodeValue(node, value)
+        setNodeValue(curr_node, value)
 
     return value
 
