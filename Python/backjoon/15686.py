@@ -46,4 +46,5 @@ for houseP in houses:
         y, x = chickenP
         scores[y][x] += d
 
-combinations()
+for i in range(1, M):
+    combs = combinations(chickens, i)
