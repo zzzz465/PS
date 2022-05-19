@@ -1,3 +1,4 @@
+from re import T
 import sys
 from typing import List, Tuple
 from itertools import combinations
@@ -38,14 +39,16 @@ house -> chicken 에 cost 저장하고 필터링?
 (도달한 치킨 집 개수)
 '''
 
-scores = [[0] * N for _ in range(N)]
+Mat = List[List[T]]
+
+visit_mat: Mat[Point] = [[map() for _ in range(N)] for _ in range(N)]
 
 for house_p in houses:
     for chicken_p in chickens:
         d = dist(house_p, chicken_p)
-
         y, x = chicken_p
-        scores[y][x] += d
+
+        visit_mat[y][x]
 
 min_score = sys.maxsize
 
@@ -53,7 +56,7 @@ for i in range(1, M):
     combs = list(combinations(chickens, i))
 
     for comb in combs:
-        score_sum = sum(map(lambda x: scores[x[0]][x[1]], comb))
+        score_sum = sum(map(lambda x: visit_mat[x[0]][x[1]], comb))
         min_score = min(score_sum, min_score)
 
 
