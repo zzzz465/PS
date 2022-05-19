@@ -1,6 +1,5 @@
-from re import T
 import sys
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, TypeVar
 from itertools import combinations
 
 N, M = map(int, input().split())
@@ -39,10 +38,10 @@ house -> chicken 에 cost 저장하고 필터링?
 (도달한 치킨 집 개수)
 '''
 
-Mat = List[List[T]]
+Mat = List[List[TypeVar("T")]]
 Dist = int
 
-visit_mat: Mat[Dict[Point, Dist]] = [[map() for _ in range(N)]
+visit_mat: Mat[Dict[Point, Dist]] = [[dict() for _ in range(N)]
                                      for _ in range(N)]
 
 for house_p in houses:
