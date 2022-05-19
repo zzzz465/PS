@@ -62,5 +62,8 @@ for i in range(1, M):
         for p in comb:
             dists[p] = min(visit_mat[p], dists[p])
 
+        score = sum(dists.values())
+        min_score = min(score, min_score)
+
 
 print(min_score)
