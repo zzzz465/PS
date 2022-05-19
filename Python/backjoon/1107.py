@@ -17,9 +17,7 @@ Delta = int
 DeltaTuple = Tuple[Delta, int]
 
 
-def values_by_delta(
-    target: int, values: Iterable[int]
-) -> Generator[DeltaTuple, None, None]:
+def values_by_delta(target: int, values: Iterable[int]) -> Generator[DeltaTuple, None, None]:
     # values 를 target 에 대한 delta 순으로 오름차순 정렬한 배열을 반환
     deltas = list(map(lambda x: (abs(target - x), x), values))
 
