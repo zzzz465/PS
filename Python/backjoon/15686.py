@@ -60,8 +60,8 @@ for i in range(1, M):
         dists = defaultdict(lambda: sys.maxsize)
         for p in comb:
             y, x = p
-            for _, v in visit_mat[y][x]:
-                dists[p] = min(v, dists[p])
+            for k, v in visit_mat[y][x]:
+                dists[k] = min(v, dists[k])
 
         score = sum(dists.values())
         min_score = min(score, min_score)
