@@ -31,7 +31,17 @@ def dist(p1: Point, p2: Point) -> int:
 
 '''
 house 순회하며 chicken 선택해서 전체 탐색?
-그런데, 치킨 집은 최대 M개만 선택 가능. 
+그런데, 치킨 집은 최대 M개만 선택 가능
 
 house -> chicken 에 cost 저장하고 필터링?
+(도달한 치킨 집 개수)
 '''
+
+scores = [[0] * N for _ in range(N)]
+
+for houseP in houses:
+    for chickenP in chickens:
+        d = dist(houseP, chickenP)
+
+        y, x = chickenP
+        scores[y][x] += d
