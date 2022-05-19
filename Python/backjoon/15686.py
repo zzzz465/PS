@@ -1,3 +1,4 @@
+from collections import defaultdict
 import sys
 from typing import Dict, List, Tuple, TypeVar
 from itertools import combinations
@@ -57,11 +58,11 @@ for i in range(1, M):
     combs = list(combinations(chickens, i))
 
     for comb in combs:
-        dists = dict()
+        dists = defaultdict(0)
         for p in comb:
             y, x = p
-            for k, v in visit_mat[y][x][p]:
-                dists[p] = min(visit_mat[p], dists[p])
+            for _, v in visit_mat[y][x]:
+                dists[p] = min(v, dists[p])
 
         score = sum(dists.values())
         min_score = min(score, min_score)
