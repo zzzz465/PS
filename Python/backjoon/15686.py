@@ -27,3 +27,8 @@ def dist(p1: Point, p2: Point) -> int:
     d2 = abs(p1[1] - p2[1])
 
     return d1 + d2
+
+
+'''
+house 순회하며 chicken 선택해서 전체 탐색?
+'''
