@@ -1,6 +1,6 @@
 from re import T
 import sys
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 from itertools import combinations
 
 N, M = map(int, input().split())
@@ -40,15 +40,17 @@ house -> chicken 에 cost 저장하고 필터링?
 '''
 
 Mat = List[List[T]]
+Dist = int
 
-visit_mat: Mat[Point] = [[map() for _ in range(N)] for _ in range(N)]
+visit_mat: Mat[Dict[Point, Dist]] = [[map() for _ in range(N)]
+                                     for _ in range(N)]
 
 for house_p in houses:
     for chicken_p in chickens:
         d = dist(house_p, chicken_p)
         y, x = chicken_p
 
-        visit_mat[y][x]
+        d2: Dict[Point, Dist] = visit_mat[y][x]
 
 min_score = sys.maxsize
 
