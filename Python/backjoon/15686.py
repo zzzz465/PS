@@ -1,9 +1,10 @@
+import sys
 from typing import List, Tuple
 from itertools import combinations
 
 N, M = map(int, input().split())
 
-mat = [*map([*map(int, input().split())], range(N))]
+mat = [[*map(int, input().split())] for _ in range(N)]
 
 Point = Tuple[int, int]
 
@@ -46,7 +47,7 @@ for house_p in houses:
         y, x = chicken_p
         scores[y][x] += d
 
-min_score = max(int)
+min_score = sys.maxsize
 
 for i in range(1, M):
     combs = combinations(chickens, i)
