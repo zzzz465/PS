@@ -50,12 +50,9 @@ for house_p in houses:
 min_score = sys.maxsize
 
 for i in range(1, M):
-    combs = combinations(chickens, i)
+    combs = list(combinations(chickens, i))
 
-    for _ in combs:
-        pass
-
-    score_sum = sum(map(lambda x: scores[x[0]][x[1]], *combs))
+    score_sum = sum(map(lambda x: scores[x[0]][x[1]], combs))
     min_score = min(score_sum, min_score)
 
 print(min_score)
