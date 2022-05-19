@@ -48,9 +48,8 @@ visit_mat: Mat[Dict[Point, Dist]] = [[dict() for _ in range(N)]
 for house_p in houses:
     for chicken_p in chickens:
         d = dist(house_p, chicken_p)
-        y, x = chicken_p
 
-        visit_mat[y][x][(y, x)] = d
+        visit_mat[chicken_p[0]][chicken_p[1]][house_p] = d
 
 min_score = sys.maxsize
 
