@@ -54,7 +54,7 @@ for i in range(1, M):
 
     for comb in combs:
         score_sum = sum(map(lambda x: scores[x[0]][x[1]], comb))
+        min_score = min(score_sum, min_score)
 
-    min_score = min(score_sum, min_score)
 
 print(min_score)
