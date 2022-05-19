@@ -1,7 +1,13 @@
 {
     "gitdoc.enabled": true,
-    "python.linting.pylintEnabled": false,
+    "python.languageServer": "Pylance",
+    "python.analysis.typeCheckingMode": "strict",
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
-    "editor.formatOnSave": true
+    "python.linting.flake8Args": [
+        "--max-line-length=120"
+    ],
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [],
+    "editor.formatOnSave": true,
 }
