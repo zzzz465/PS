@@ -1,5 +1,5 @@
 from typing import List, Tuple
-
+from itertools import combinations
 
 N, M = map(int, input().split())
 
@@ -45,3 +45,5 @@ for houseP in houses:
 
         y, x = chickenP
         scores[y][x] += d
+
+combinations()
