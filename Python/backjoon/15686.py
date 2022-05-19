@@ -39,12 +39,19 @@ house -> chicken 에 cost 저장하고 필터링?
 
 scores = [[0] * N for _ in range(N)]
 
-for houseP in houses:
-    for chickenP in chickens:
-        d = dist(houseP, chickenP)
+for house_p in houses:
+    for chicken_p in chickens:
+        d = dist(house_p, chicken_p)
 
-        y, x = chickenP
+        y, x = chicken_p
         scores[y][x] += d
+
+min_score = max(int)
 
 for i in range(1, M):
     combs = combinations(chickens, i)
+
+    score_sum = sum(map(lambda x: scores[x[0]][x[1]], combs))
+    min_score = min(score_sum, min_score)
+
+print(min_score)
