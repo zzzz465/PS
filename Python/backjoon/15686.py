@@ -58,7 +58,7 @@ for i in range(1, M):
     combs = list(combinations(chickens, i))
 
     for comb in combs:
-        dists = defaultdict(0)
+        dists = defaultdict(lambda: 0)
         for p in comb:
             y, x = p
             for _, v in visit_mat[y][x]:
