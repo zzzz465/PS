@@ -53,7 +53,7 @@ for house_p in houses:
 
 min_score = sys.maxsize
 
-for i in range(1, M):
+for i in range(1, M + 1):
     combs = list(combinations(chickens, i))
 
     for comb in combs:
