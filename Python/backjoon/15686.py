@@ -50,7 +50,7 @@ for house_p in houses:
         d = dist(house_p, chicken_p)
         y, x = chicken_p
 
-        d2: Dict[Point, Dist] = visit_mat[y][x]
+        visit_mat[y][x][(y, x)] = d
 
 min_score = sys.maxsize
 
@@ -58,8 +58,9 @@ for i in range(1, M):
     combs = list(combinations(chickens, i))
 
     for comb in combs:
-        score_sum = sum(map(lambda x: visit_mat[x[0]][x[1]], comb))
-        min_score = min(score_sum, min_score)
+        dists = dict()
+        for p in comb:
+            dists[p] = min(visit_mat[p], dists[p])
 
 
 print(min_score)
