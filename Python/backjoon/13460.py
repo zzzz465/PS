@@ -110,7 +110,7 @@ def main():
     N, M = map(int, input().split())
 
     # N * M matrix
-    mat: List[List[Value]] = cast(List[List[Value]], [list(input().split()) for _ in range(N)])
+    mat: List[List[Value]] = cast(List[List[Value]], [list(input()) for _ in range(N)])
 
     print(solve(N, M, mat))
 
