@@ -11,24 +11,35 @@
 
 상태와 관련된 BFS 를 수행하면 될 듯
 """
-
-from enum import Enum
-from typing import List
+from typing import List, Literal, NamedTuple, Optional, Union, cast
 
 
-class Value(Enum):
-    WALL = "#"
-    HOLE = "O"
-    MARBLE_R = "R"
-    MARBLE_B = "B"
-    NONE = "."
+WALL = Literal["#"]
+HOLE = Literal["O"]
+MARBLE_R = Literal["R"]
+MARBLE_B = Literal["B"]
+NONE = Literal["."]
 
+Value = Union[WALL, HOLE, MARBLE_R, MARBLE_B, NONE]
 
 Matrix = List[List[Value]]
+Point = NamedTuple("Point", [("y", int), ("x", int)])
 
 
-def mat_valid(mat: Matrix):
+def mat_find(mat: Matrix, value: Value) -> Optional[Point]:
+    for y, li in enumerate(mat):
+        for x, val in enumerate(li):
+            if val == value:
+                return Point(y, x)
 
+    return None
+
+
+def mat_get(mat: Matrix, p: Point) -> Optional[Value]:
+    pass
+
+
+def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
     pass
 
 
@@ -41,6 +52,6 @@ def main():
     N, M = map(int, input().split())
 
     # N * M matrix
-    mat: List[List[Value]] = [list(map(lambda x: Value(x), input().split())) for _ in range(N)]
+    mat: List[List[Value]] = cast(List[List[Value]], [list(input().split()) for _ in range(N)])
 
     print(solve(N, M, mat))
