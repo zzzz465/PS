@@ -77,6 +77,7 @@ def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
         return False
 
     if r_p == b_p:
+        # 구슬이 같이 있음 = 구멍에 둘다 빠진 상황
         return False
 
     return True
@@ -97,7 +98,7 @@ def move(p: Point, dir: int, mat: Matrix) -> Point:
 
         v = mat_get(mat, Point(new_y, new_x))
 
-        if v == "#" or v == "R" or v == "B":
+        if v == "#":
             break
         elif v == "O":
             p = Point(new_y, new_x)
