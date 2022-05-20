@@ -89,15 +89,16 @@ dir_map = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 def move(p: Point, dir: int, mat: Matrix) -> Point:
     """
     실패 요인: 구슬을 한 칸씩 이동시키는 것이 아니고, 계속 기울여서 벽에 닿을 때 까지 굴리는 것이다.
+    이것을 제대로 구현하지 않았음 (문제를 잘 읽자...)
     """
 
     while True:
         new_y, new_x = map(operator.add, p, dir_map[dir])
 
-        if mat_get(mat, Point(new_y, new_x)) == "#":
+        if mat_get(mat, Point(new_y, new_x)) != ".":
             break
 
-        if mat_get(mat, Point(new_y, new_x)) == "#":
+        if mat_get(mat, Point(new_y, new_x)) != ".":
             break
 
         p = Point(new_y, new_x)
@@ -106,10 +107,12 @@ def move(p: Point, dir: int, mat: Matrix) -> Point:
 
 
 def solve(N: int, M: int, mat: Matrix):
+    # define initial values
     Record = NamedTuple("Record", (("r", Point), ("b", Point)))
     Cost = int
     state: Dict[Record, int] = defaultdict(lambda: sys.maxsize)
     hole = mat_find(mat, "O")
+    min_cost = sys.maxsize
 
     init_b_p = mat_find(mat, "B")
     if not init_b_p:
@@ -119,9 +122,8 @@ def solve(N: int, M: int, mat: Matrix):
     if not init_r_p:
         raise Exception()
 
+    # finding optimal cost using BFS
     q: Deque[Tuple[Record, Cost]] = deque([(Record(init_r_p, init_b_p), 0)])
-
-    min_cost = sys.maxsize
 
     while len(q) > 0:
         curr, cost = q.popleft()
