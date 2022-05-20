@@ -31,7 +31,7 @@ def build_values(values: List[int]) -> Generator[str, None, None]:
     def _combination(size: int, values: Iterable[int]) -> Generator[List[int], None, None]:
         if size == 0:
             for i in values:
-                yield [i]
+                return
         else:
             for i in values:
                 for j in _combination(size - 1, values):
