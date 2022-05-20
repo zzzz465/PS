@@ -87,15 +87,22 @@ dir_map = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def move(p: Point, dir: int, mat: Matrix) -> Point:
-    new_y, new_x = map(operator.add, p, dir_map[dir])
+    """
+    실패 요인: 구슬을 한 칸씩 이동시키는 것이 아니고, 계속 기울여서 벽에 닿을 때 까지 굴리는 것이다.
+    """
 
-    if mat_get(mat, Point(new_y, new_x)) == "#":
-        new_y = p.y
+    while True:
+        new_y, new_x = map(operator.add, p, dir_map[dir])
 
-    if mat_get(mat, Point(new_y, new_x)) == "#":
-        new_x = p.x
+        if mat_get(mat, Point(new_y, new_x)) == "#":
+            break
 
-    return Point(new_y, new_x)
+        if mat_get(mat, Point(new_y, new_x)) == "#":
+            break
+
+        p = Point(new_y, new_x)
+
+    return p
 
 
 def solve(N: int, M: int, mat: Matrix):
