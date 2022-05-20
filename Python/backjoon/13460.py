@@ -99,16 +99,15 @@ def move(p: Point, dir: int, mat: Matrix, other: Point) -> Point:
     2. 구슬이 동시에 빠지는 것을 고려하지 않음
     """
 
-    while True:
-        new_y, new_x = map(operator.add, p, dir_map[dir])
-        new_p = Point(new_y, new_x)
+    new_y, new_x = p.y, p.x
+    new_p = p
 
+    while True:
         v = mat_get(mat, Point(new_y, new_x))
 
         if new_p == other:
             if v == "O":
                 p = new_p
-
             break
         else:
             if v == "#":
@@ -117,7 +116,10 @@ def move(p: Point, dir: int, mat: Matrix, other: Point) -> Point:
                 p = new_p
                 break
             elif v == ".":
-                p = Point(new_y, new_x)
+                p = new_p
+
+        new_y, new_x = map(operator.add, p, dir_map[dir])
+        new_p = Point(new_y, new_x)
 
     return p
 
