@@ -29,9 +29,8 @@ def values_by_delta(target: int, values: Iterable[int]) -> Generator[DeltaTuple,
 
 def build_values(values: List[int]) -> Generator[str, None, None]:
     def _combination(size: int, values: Iterable[int]) -> Generator[List[int], None, None]:
-        if size == 0:
-            for i in values:
-                return
+        if size <= 0:
+            return
         else:
             for i in values:
                 for j in _combination(size - 1, values):
@@ -40,6 +39,7 @@ def build_values(values: List[int]) -> Generator[str, None, None]:
     delta = 1
     while True:
         i, j = len(str(N)) - delta, len(str(N)) + delta
+
         for comb in _combination(i, values):
             yield "".join(map(str, comb))
 
