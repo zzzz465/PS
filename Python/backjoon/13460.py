@@ -27,7 +27,13 @@ class Value(Enum):
 Matrix = List[List[Value]]
 
 
+def mat_valid(mat: Matrix):
+
+    pass
+
+
 def solve(N: int, M: int, mat: Matrix):
+
     pass
 
 
