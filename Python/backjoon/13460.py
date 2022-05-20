@@ -99,11 +99,11 @@ def move(p: Point, dir: int, mat: Matrix) -> Point:
 
         if v == "#" or v == "R" or v == "B":
             break
-        elif v == "O" or v == ".":
+        elif v == "O":
             p = Point(new_y, new_x)
-
-            if v == "O":
-                break
+            break
+        elif v == ".":
+            p = Point(new_y, new_x)
 
     return p
 
