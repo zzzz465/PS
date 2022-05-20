@@ -86,10 +86,16 @@ def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
 dir_map = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
-def move(p: Point, dir: int) -> Point:
-    y, x = map(operator.add, p, dir_map[dir])
+def move(p: Point, dir: int, mat: Matrix) -> Point:
+    new_y, new_x = map(operator.add, p, dir_map[dir])
 
-    return Point(y, x)
+    if mat_get(mat, Point(new_y, new_x)) == "#":
+        new_y = p.y
+
+    if mat_get(mat, Point(new_y, new_x)) == "#":
+        new_x = p.x
+
+    return Point(new_y, new_x)
 
 
 def solve(N: int, M: int, mat: Matrix):
@@ -120,8 +126,8 @@ def solve(N: int, M: int, mat: Matrix):
         cost += 1
 
         for i in range(0, 4):
-            new_r_p = move(curr.r, i)
-            new_b_p = move(curr.b, i)
+            new_r_p = move(curr.r, i, mat)
+            new_b_p = move(curr.b, i, mat)
 
             if not mat_valid(new_r_p, new_b_p, mat):
                 continue
