@@ -12,6 +12,7 @@
 상태와 관련된 BFS 를 수행하면 될 듯
 """
 from collections import defaultdict, deque
+import operator
 import sys
 from typing import Deque, Dict, List, Literal, NamedTuple, Optional, Tuple, Union, cast
 
@@ -42,6 +43,17 @@ def mat_get(mat: Matrix, p: Point) -> Value:
 
 
 def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
+    def _check_bound(p: Point):  # return true if p is out of bound
+        h = len(mat)
+        w = len(mat[0])
+
+        if not (0 <= p.y < h):
+            return True
+        elif not (0 <= p.x < w):
+            return True
+
+        return False
+
     def _check_in_wall(p: Point):
         x = mat_get(mat, p)
 
@@ -52,13 +64,19 @@ def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
 
         return x == HOLE
 
-    if _check_in_wall(r_p):
+    if _check_bound(r_p):
+        return False
+    elif _check_in_wall(r_p):
+        return False
+
+    if _check_bound(b_p):
         return False
     elif _check_in_wall(b_p):
         return False
     elif _check_in_hole(b_p):
         return False
-    elif r_p == b_p:
+
+    if r_p == b_p:
         return False
 
     return True
@@ -69,7 +87,7 @@ dir_map = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def move(p: Point, dir: int) -> Point:
-    y, x = p + dir_map[dir]
+    y, x = map(operator.add, p, dir_map[dir])
 
     return Point(y, x)
 
@@ -78,6 +96,7 @@ def solve(N: int, M: int, mat: Matrix):
     Record = NamedTuple("Record", (("r", Point), ("b", Point)))
     Cost = int
     state: Dict[Record, int] = defaultdict(lambda: sys.maxsize)
+    hole = mat_find(mat, "O")
 
     init_b_p = mat_find(mat, "B")
     if not init_b_p:
@@ -88,8 +107,16 @@ def solve(N: int, M: int, mat: Matrix):
         raise Exception()
 
     q: Deque[Tuple[Record, Cost]] = deque([(Record(init_r_p, init_b_p), 0)])
+
+    min_cost = sys.maxsize
+
     while len(q) > 0:
         curr, cost = q.popleft()
+
+        if curr.r == hole:
+            min_cost = min(cost, min_cost)
+            continue
+
         cost += 1
 
         for i in range(0, 4):
@@ -104,6 +131,11 @@ def solve(N: int, M: int, mat: Matrix):
             if cost < memo_cost:
                 state[key] = cost
                 q.append((key, cost))
+
+    if min_cost == sys.maxsize:
+        return -1
+    else:
+        return min_cost
 
 
 def main():
