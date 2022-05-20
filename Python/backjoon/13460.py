@@ -95,13 +95,15 @@ def move(p: Point, dir: int, mat: Matrix) -> Point:
     while True:
         new_y, new_x = map(operator.add, p, dir_map[dir])
 
-        if mat_get(mat, Point(new_y, new_x)) == "#":
-            break
+        v = mat_get(mat, Point(new_y, new_x))
 
-        if mat_get(mat, Point(new_y, new_x)) == "#":
+        if v == "#" or v == "R" or v == "B":
             break
+        elif v == "O" or v == ".":
+            p = Point(new_y, new_x)
 
-        p = Point(new_y, new_x)
+            if v == "O":
+                break
 
     return p
 
