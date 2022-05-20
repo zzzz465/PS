@@ -35,12 +35,31 @@ def mat_find(mat: Matrix, value: Value) -> Optional[Point]:
     return None
 
 
-def mat_get(mat: Matrix, p: Point) -> Optional[Value]:
-    pass
+def mat_get(mat: Matrix, p: Point) -> Value:
+    return mat[p.y][p.x]
 
 
 def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
-    pass
+    def _check_in_wall(p: Point):
+        x = mat_get(mat, p)
+
+        return x == WALL
+
+    def _check_in_hole(p: Point):
+        x = mat_get(mat, p)
+
+        return x == HOLE
+
+    if _check_in_wall(r_p):
+        return False
+    elif _check_in_wall(b_p):
+        return False
+    elif _check_in_hole(b_p):
+        return False
+    elif r_p == b_p:
+        return False
+
+    return True
 
 
 def solve(N: int, M: int, mat: Matrix):
