@@ -27,21 +27,36 @@ def values_by_delta(target: int, values: Iterable[int]) -> Generator[DeltaTuple,
         yield delta
 
 
-def build_values(target: str, values: List[int]) -> Generator[str, None, None]:
-    x = int(target[0])
-
-    for delta in values_by_delta(x, values):
-        if len(target[1:]) == 0:
-            yield str(delta[1])
+def build_values(values: List[int]) -> Generator[str, None, None]:
+    def _combination(size: int, values: Iterable[int]) -> Generator[List[int], None, None]:
+        if size == 0:
+            for i in values:
+                yield [i]
         else:
-            for sub in build_values(target[1:], values):
-                yield str(delta[1]) + sub
+            for i in values:
+                for j in _combination(size - 1, values):
+                    yield [i] + j
+
+    delta = 1
+    while True:
+        i, j = len(str(N)) - delta, len(str(N)) + delta
+        for comb in _combination(i, values):
+            yield "".join(map(str, comb))
+
+        for comb in _combination(j, values):
+            yield "".join(map(str, comb))
+
+        delta += 1
 
 
 min_diff = sys.maxsize
 min_val = sys.maxsize
 
-for value in map(int, build_values(str(N), available_buttons)):
+for valueStr in build_values(available_buttons):
+    if len(valueStr) >= (len(str(N)) + 2):
+        break
+
+    value = int(valueStr)
     diff = abs(N - value)
 
     if diff < min_diff:
