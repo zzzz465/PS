@@ -42,6 +42,10 @@ def mat_get(mat: Matrix, p: Point) -> Value:
     return mat[p.y][p.x]
 
 
+def mat_set(mat: Matrix, p: Point, value: Value) -> None:
+    mat[p.y][p.x] = value
+
+
 def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
     def _check_bound(p: Point):  # return true if p is out of bound
         h = len(mat)
@@ -129,10 +133,12 @@ def solve(N: int, M: int, mat: Matrix):
     init_b_p = mat_find(mat, "B")
     if not init_b_p:
         raise Exception()
+    mat_set(mat, init_b_p, ".")
 
     init_r_p = mat_find(mat, "R")
     if not init_r_p:
         raise Exception()
+    mat_set(mat, init_r_p, ".")
 
     # finding optimal cost using BFS
     q: Deque[Tuple[Record, Cost]] = deque([(Record(init_r_p, init_b_p), 0)])
