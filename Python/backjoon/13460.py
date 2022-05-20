@@ -12,10 +12,11 @@
 상태와 관련된 BFS 를 수행하면 될 듯
 """
 from collections import defaultdict, deque
-from dataclasses import dataclass
+from io import StringIO
 import operator
 import sys
-from typing import Deque, Dict, List, Literal, NamedTuple, Optional, Tuple, Union, cast
+from typing import IO, Deque, Dict, List, Literal, NamedTuple, Optional, Tuple, Union, cast
+import unittest
 
 
 WALL = Literal["#"]
@@ -47,7 +48,7 @@ def mat_set(mat: Matrix, p: Point, value: Value) -> None:
     mat[p.y][p.x] = value
 
 
-def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
+def mat_valid(r_p: Point, b_p: Point, mat: Matrix) -> bool:
     def _check_bound(p: Point):  # return true if p is out of bound
         h = len(mat)
         w = len(mat[0])
@@ -125,13 +126,16 @@ def move(p: Point, dir: int, mat: Matrix, other: Point) -> Point:
     return p
 
 
-def solve(N: int, M: int, mat: Matrix):
+def solve(N: int, M: int, mat: Matrix) -> int:
     # define initial values
     Record = NamedTuple("Record", (("r", Point), ("b", Point)))
     Cost = int
     state: Dict[Record, int] = defaultdict(lambda: sys.maxsize)
-    hole = mat_find(mat, "O")
     min_cost = sys.maxsize
+
+    hole = mat_find(mat, "O")
+    if not hole:
+        raise Exception()
 
     init_b_p = mat_find(mat, "B")
     if not init_b_p:
@@ -148,6 +152,10 @@ def solve(N: int, M: int, mat: Matrix):
 
     while len(q) > 0:
         curr, cost = q.popleft()
+
+        if cost > 10:
+            # 실패 요인: 문제 조건에 10번 이하로 불가능하면 -1 을 출력하라고 명시되어 있었음
+            continue
 
         if curr.r == hole:
             min_cost = min(cost, min_cost)
@@ -177,24 +185,251 @@ def solve(N: int, M: int, mat: Matrix):
         return min_cost
 
 
-def main():
-    N, M = map(int, input().split())
+def parse_input(io: IO[str]) -> Tuple[int, int, Matrix]:
+    N, M = map(int, io.readline().split())
 
     # N * M matrix
-    mat: List[List[Value]] = cast(List[List[Value]], [list(input()) for _ in range(N)])
+    mat: Matrix = cast(Matrix, [list(io.readline()) for _ in range(N)])
+
+    return N, M, mat
+
+
+def main() -> None:
+    N, M, mat = parse_input(sys.stdin)
 
     print(solve(N, M, mat))
 
 
-@dataclass
-class TestCase:
+class TestCase(unittest.TestCase):
     N: int
     M: int
-    raw: str
+    mat: Matrix
+    expected: int
+
+    def __init__(self, methodName: str = ...) -> None:
+        super().__init__(self.test_solve.__name__)
+
+    def test_solve(self):
+        res = solve(self.N, self.M, self.mat)
+        self.assertEqual(res, self.expected)
 
 
-def test():
-    pass
+def parse_tc(tc_raw: str, expected: int) -> TestCase:
+    # https://dongyeopblog.wordpress.com/2016/06/13/python-stringio-%ED%8C%8C%EC%9D%BC%EB%A1%9C-%EC%9D%BD%EA%B8%B0%EC%93%B0%EA%B8%B0/
+    io = StringIO(tc_raw.strip())  # rstrip 포함하면 termination 안이뤄져서 stdin 대기함 -> 아님
+    io.seek(0)
+    N, M, mat = parse_input(io)
+    tc = TestCase()
+
+    tc.N = N
+    tc.M = M
+    tc.mat = mat
+    tc.expected = expected
+
+    return tc
+
+
+def run_test() -> None:
+    tcs = [
+        (
+            """
+5 5
+#####
+#..B#
+#.#.#
+#RO.#
+#####
+""",
+            1,
+        ),
+        (
+            """
+            7 7
+#######
+#...RB#
+#.#####
+#.....#
+#####.#
+#O....#
+#######
+            """,
+            5,
+        ),
+        (
+            """
+            7 7
+#######
+#..R#B#
+#.#####
+#.....#
+#####.#
+#O....#
+#######
+            """,
+            5,
+        ),
+        (
+            """
+            10 10
+##########
+#R#...##B#
+#...#.##.#
+#####.##.#
+#......#.#
+#.######.#
+#.#....#.#
+#.#.#.#..#
+#...#.O#.#
+##########
+            """,
+            -1,
+        ),
+        (
+            """
+            3 7
+#######
+#R.O.B#
+#######
+            """,
+            1,
+        ),
+        (
+            """
+            10 10
+##########
+#R#...##B#
+#...#.##.#
+#####.##.#
+#......#.#
+#.######.#
+#.#....#.#
+#.#.##...#
+#O..#....#
+##########
+            """,
+            7,
+        ),
+        (
+            """
+3 10
+##########
+#.O....RB#
+##########
+            """,
+            -1,
+        ),
+        (
+            """
+7 5
+#####
+###.#
+##.O#
+#R..#
+#####
+###B#
+#####
+            """,
+            2,
+        ),
+        (
+            """
+5 10
+##########
+#.#......#
+##.......#
+#OR..B.#.#
+##########
+            """,
+            7,
+        ),
+        (
+            """
+4 7
+#######
+##R...#
+#O.#.B#
+#######
+            """,
+            2,
+        ),
+        (
+            """
+7 4
+####
+#B##
+####
+#.##
+#R##
+#O##
+####
+            """,
+            1,
+        ),
+        (
+            """
+10 5
+#####
+#..##
+#.O##
+#...#
+#.R##
+##.##
+##.##
+#.###
+#.B.#
+#####
+            """,
+            1,
+        ),
+        (
+            """
+            3 6
+######
+#.ORB#
+######
+            """,
+            -1,
+        ),
+        (
+            """
+            8 8
+########
+#.####.#
+#...#B##
+#.##.R.#
+######.#
+##.##O.#
+###.##.#
+########
+            """,
+            7,
+        ),
+        (
+            """
+            4 6
+######
+#R####
+#B..O#
+######
+            """,
+            -1,
+        ),
+        (
+            """
+            4 6
+######
+#R#O##
+#B...#
+######
+            """,
+            4,
+        ),
+    ]
+
+    suite = unittest.TestSuite([parse_tc(*x) for x in tcs])
+
+    unittest.TextTestRunner().run(suite)
 
 
 main()
+# run_test()
