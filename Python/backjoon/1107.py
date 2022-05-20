@@ -1,6 +1,8 @@
 import sys
 from typing import Generator, Iterable, List, Tuple
 
+# 포기!
+
 
 N = int(input())
 M = int(input())
@@ -39,11 +41,21 @@ def build_values(values: List[int]) -> Generator[str, None, None]:
                 for j in _combination(size - 1, values):
                     yield [i] + j
 
+    def _combination_by_delta(target: str, values: Iterable[int]) -> Generator[List[int], None, None]:
+        v = int(target[0])
+
+        for _, value in values_by_delta(v, values):
+            if len(target) == 1:
+                yield [value]
+            else:
+                for sub in _combination_by_delta(target[1:], values):
+                    yield [v] + sub
+
     delta = 0
     while True:
         i, j = len(str(N)) - delta, len(str(N)) + delta
 
-        for comb in _combination(i, values):
+        for comb in _combination_by_delta(i, values):
             yield "".join(map(str, comb))
 
         for comb in _combination(j, values):
