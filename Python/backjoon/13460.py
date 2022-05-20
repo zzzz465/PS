@@ -12,6 +12,7 @@
 상태와 관련된 BFS 를 수행하면 될 듯
 """
 from collections import defaultdict, deque
+from dataclasses import dataclass
 import operator
 import sys
 from typing import Deque, Dict, List, Literal, NamedTuple, Optional, Tuple, Union, cast
@@ -183,6 +184,17 @@ def main():
     mat: List[List[Value]] = cast(List[List[Value]], [list(input()) for _ in range(N)])
 
     print(solve(N, M, mat))
+
+
+@dataclass
+class TestCase:
+    N: int
+    M: int
+    raw: str
+
+
+def test():
+    pass
 
 
 main()
