@@ -87,24 +87,33 @@ def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
 dir_map = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
-def move(p: Point, dir: int, mat: Matrix) -> Point:
+def move(p: Point, dir: int, mat: Matrix, other: Point) -> Point:
     """
-    실패 요인: 구슬을 한 칸씩 이동시키는 것이 아니고, 계속 기울여서 벽에 닿을 때 까지 굴리는 것이다.
-    이것을 제대로 구현하지 않았음 (문제를 잘 읽자...)
+    실패 요인:
+    1. 구슬을 한 칸씩 이동시키는 것이 아니고, 계속 기울여서 벽에 닿을 때 까지 굴리는 것이다.
+        이것을 제대로 구현하지 않았음 (문제를 잘 읽자...)
+    2. 구슬이 동시에 빠지는 것을 고려하지 않음
     """
 
     while True:
         new_y, new_x = map(operator.add, p, dir_map[dir])
+        new_p = Point(new_y, new_x)
 
         v = mat_get(mat, Point(new_y, new_x))
 
-        if v == "#":
+        if new_p == other:
+            if v == "O":
+                p = new_p
+
             break
-        elif v == "O":
-            p = Point(new_y, new_x)
-            break
-        elif v == ".":
-            p = Point(new_y, new_x)
+        else:
+            if v == "#":
+                break
+            elif v == "O":
+                p = new_p
+                break
+            elif v == ".":
+                p = Point(new_y, new_x)
 
     return p
 
@@ -138,8 +147,11 @@ def solve(N: int, M: int, mat: Matrix):
         cost += 1
 
         for i in range(0, 4):
-            new_r_p = move(curr.r, i, mat)
-            new_b_p = move(curr.b, i, mat)
+            # 충돌 때문에 한 쪽을 두번 갱신해야 함
+            # n >= 2, n 번 호출해도 결과는 같음
+            new_r_p = move(curr.r, i, mat, curr.b)
+            new_b_p = move(curr.b, i, mat, new_r_p)
+            new_r_p = move(new_r_p, i, mat, new_b_p)
 
             if not mat_valid(new_r_p, new_b_p, mat):
                 continue
