@@ -11,7 +11,9 @@
 
 상태와 관련된 BFS 를 수행하면 될 듯
 """
-from typing import List, Literal, NamedTuple, Optional, Union, cast
+from collections import defaultdict, deque
+import sys
+from typing import Deque, Dict, List, Literal, NamedTuple, Optional, Tuple, Union, cast
 
 
 WALL = Literal["#"]
@@ -62,9 +64,46 @@ def mat_valid(r_p: Point, b_p: Point, mat: Matrix):
     return True
 
 
-def solve(N: int, M: int, mat: Matrix):
+# (y, x), Up, Right, Down, Left
+dir_map = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-    pass
+
+def move(p: Point, dir: int) -> Point:
+    y, x = p + dir_map[dir]
+
+    return Point(y, x)
+
+
+def solve(N: int, M: int, mat: Matrix):
+    Record = NamedTuple("Record", (("r", Point), ("b", Point)))
+    Cost = int
+    state: Dict[Record, int] = defaultdict(lambda: sys.maxsize)
+
+    init_b_p = mat_find(mat, "B")
+    if not init_b_p:
+        raise Exception()
+
+    init_r_p = mat_find(mat, "R")
+    if not init_r_p:
+        raise Exception()
+
+    q: Deque[Tuple[Record, Cost]] = deque([(Record(init_r_p, init_b_p), 0)])
+    while len(q) > 0:
+        curr, cost = q.popleft()
+        cost += 1
+
+        for i in range(0, 4):
+            new_r_p = move(curr.r, i)
+            new_b_p = move(curr.b, i)
+
+            if not mat_valid(new_r_p, new_b_p, mat):
+                continue
+
+            key = Record(new_r_p, new_b_p)
+            memo_cost = state[key]
+            if cost < memo_cost:
+                state[key] = cost
+                q.append((key, cost))
 
 
 def main():
@@ -74,3 +113,6 @@ def main():
     mat: List[List[Value]] = cast(List[List[Value]], [list(input().split()) for _ in range(N)])
 
     print(solve(N, M, mat))
+
+
+main()
