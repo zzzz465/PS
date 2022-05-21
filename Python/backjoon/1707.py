@@ -1,8 +1,13 @@
+from io import StringIO
 import sys
-from typing import List, Set, TextIO, Tuple
+from typing import Any, Callable, Iterable, List, Set, TextIO, Tuple, TypeVar
+import unittest
+
+Vertice = Tuple[int, int]
+TypeReturn = TypeVar("Return")
 
 
-def solve(K: int, vertices: List[Tuple[int, int]]) -> bool:
+def solve(vertices: List[Vertice]) -> bool:
     Group = Set[int]
 
     g1: Group = set()
@@ -18,29 +23,94 @@ def solve(K: int, vertices: List[Tuple[int, int]]) -> bool:
             else:
                 g1.add(v)
 
-    return len(g1 - g2) > 0
+    return len(g1.intersection(g2)) == 0
 
 
 def parse_input(io: TextIO):
     K = int(io.readline())
-    vertices: List[Tuple[int, int]] = list()
+
+    verticesArr: List[List[Vertice]] = []
 
     for _ in range(K):
-        u, v = map(int, io.readline())
-        vertices.append((u, v))
+        V, E = map(int, io.readline().split())
+        vertices: List[Tuple[int, int]] = list()
 
-    return K, vertices
+        for _ in range(E):
+            u, v = map(int, io.readline().split())
+            vertices.append((u, v))
+
+        verticesArr.append(vertices)
+
+    return verticesArr
 
 
 def main():
-    K, vertices = parse_input(sys.stdin)
+    verticesArr = parse_input(sys.stdin)
 
-    res = solve(K, vertices)
+    for vertices in verticesArr:
+        res = solve(vertices)
 
-    if res:
-        print("YES")
-    else:
-        print("NO")
+        if res:
+            print("YES")
+        else:
+            print("NO")
+
+
+test_cases = [
+    (
+        """
+2
+3 2
+1 3
+2 3
+4 4
+1 2
+2 3
+3 4
+4 2
+    """,
+        (True, False),
+    )
+]
+
+
+class TestCase(unittest.TestCase):
+    def __init__(self, vertices: List[Vertice], expected: bool) -> None:
+        self.vertices = vertices
+        self.expected = expected
+
+        super().__init__(self.test_run.__name__)
+
+    def test_run(self):
+        res = solve(self.vertices)
+        self.assertEqual(res, self.expected)
+
+
+# what is "..."? https://seungwubaek.github.io/tools/numpy/ellipsis/
+def apply(func: Callable[..., TypeReturn]) -> Callable[..., TypeReturn]:
+    def _apply(args: Iterable[Any]) -> TypeReturn:
+        return func(*args)
+
+    return _apply
+
+
+def parse_tc(raw: str, expected: List[bool]) -> List[TestCase]:
+    verticesArr = parse_input(StringIO(raw.strip()))
+
+    test_cases: List[TestCase] = []
+
+    for i, vertices in enumerate(verticesArr):
+        test_cases.append(TestCase(vertices, expected[i]))
+
+    return test_cases
+
+
+def runTest():
+    tcs = list(map(apply(parse_tc), test_cases))
+    suite = unittest.TestSuite([tc for sub in tcs for tc in sub])
+
+    unittest.TextTestRunner().run(suite)
 
 
 main()
+# runTest()
