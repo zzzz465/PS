@@ -56,5 +56,6 @@ if __name__ == "__main__":
     # assert Solution().minOperations(11) == 5
     # assert Solution().minOperations(102)
     # assert Solution().minOperations(98)
-    print(Solution().minOperations(95))
+    # print(Solution().minOperations(95))
+    print(Solution().minOperations(97))
     # assert Solution().minOperations(16) == 6

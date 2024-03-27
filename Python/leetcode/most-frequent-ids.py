@@ -1,12 +1,15 @@
-from collections import OrderedDict
+from collections import defaultdict
+from dataclasses import dataclass
+from typing import Optional, Union
 
 
+@dataclass
 class Node:
     key: int
     value: int
 
-    left: "Node" | None
-    right: "Node" | None
+    left: Union["Node", None]
+    right: Union["Node", None]
 
     def max(self):
         if self.right is not None:
@@ -14,19 +17,19 @@ class Node:
         else:
             return self.value
 
-    def search(self, node: "Node"):
+    def search(self, node: "Node") -> Optional["Node"]:
         if node.value < self.value:
             if node.left is not None:
-                if node.left == node.key:
+                if self.left.key == node.key:
                     return node.left
                 else:
-                    node.left.search(node)
+                    self.left.search(node)
         else:
             if node.right is not None:
-                if node.right == node.key:
+                if self.right.key == node.key:
                     return node.right
                 else:
-                    node.right.search(node)
+                    self.right.search(node)
 
     def insert(self, node: "Node"):
         if node.value < self.value:
@@ -48,42 +51,37 @@ class Node:
 
     def remove(self, node: "Node"):
         if node.value < self.value:
-            if node.left is not None:
-                if node.left == node.key:
+            if self.left is not None:
+                if self.left.key == node.key:
                     node.left = None
                 else:
-                    node.left.remove(node)
+                    self.left.remove(node)
         else:
-            if node.right is not None:
-                if node.right == node.key:
-                    node.right = None
+            if self.right is not None:
+                if self.right.key == node.key:
+                    self.right = None
                 else:
-                    node.right.remove(node)
+                    self.right.remove(node)
 
 
 class Solution:
     def mostFrequentIDs(self, nums: list[int], freq: list[int]) -> list[int]:
         result = [0] * len(freq)
-        idFreq = OrderedDict()
 
+        idFreq = defaultdict(int)
         # tree for searching max value fast
-        root = Node()
-        root.key = -1
-        root.value = -1
+        root = Node(-1, -1, None, None)
 
         for i in range(len(nums)):
             id = nums[i]
             f = freq[i]
 
-            if id not in idFreq:
-                idFreq[id] = 0
-
+            root.remove(Node(id, idFreq[id], None, None))
             idFreq[id] += f
-            idFreq[id] = max(idFreq[id], 0)  # to fix if the value goes negative
+            idFreq[id] = max(idFreq[id], 0)  # to fix negative value
+            root.insert(Node(id, idFreq[id], None, None))
 
-            # main cause of time limit error
-            maxFreq = max(idFreq.values())
-            result[i] = maxFreq
+            result[i] = root.max()
 
         return result
 
